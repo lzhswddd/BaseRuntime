@@ -1,0 +1,40 @@
+#pragma once
+#include "layer.h"
+
+namespace lzh {
+	namespace nn
+	{
+		class LZHAPI batchnormalization :
+			public parametrics
+		{
+		public:
+			batchnormalization(string name = "");
+			~batchnormalization();
+			Size3 initialize(Size3 param_size);
+			void updateregular();
+			void update(const vector<Mat> &d, int *idx);
+			void forword(const Mat &param, Mat &out)const;
+			void forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> &variable);
+			void back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const;
+			void append_size(vector<Size3> *size);
+			void save(json * jarray, FILE* file)const;
+			void load(json & info, FILE* file);
+			void save_param(FILE* file)const;
+			void load_param(FILE* file);
+			void show(std::ostream &out)const;
+			mat_t norm(int num)const;
+
+			mat_t momentum = 0.9f;
+			mat_t epsilon = 1e-8f;
+			Mat gamma;
+			Mat beta;
+			Mat	moving_mean;
+			Mat moving_var;
+		private:
+			bool isVec;
+			Mat mean, var;
+			STLApi<vector<Mat>> variable[2];
+		};
+	}
+}
+

@@ -1,0 +1,38 @@
+#pragma once
+#ifndef __AUTORESETEVENT_H__
+#define __AUTORESETEVENT_H__
+
+#include "core.h"
+#include "pointer.h"
+
+
+namespace lzh
+{
+	class LZHAPI AutoResetEventHandle 
+		: public Handle 
+	{
+	public:
+		void create(bool bManualReset = false);
+		void release();
+	};
+	template<> struct TEMPLATE_API PointerInterFace<AutoResetEventHandle>
+	{
+		using value_type = typename AutoResetEventHandle;
+		bool Custom() { return true; }
+		AutoResetEventHandle* Create(bool bManualReset) { AutoResetEventHandle* handle = new AutoResetEventHandle(); handle->create(bManualReset); return handle; }
+		void Release(AutoResetEventHandle* ptr) { ptr->release(); }
+	};
+	class LZHAPI AutoResetEvent
+	{
+	public:
+		AutoResetEvent(bool bManualReset = false);
+		~AutoResetEvent();
+		bool WaitOne(uint32 dwWaitTimeMillSeconds);
+		bool Set();
+		bool Reset();
+
+	private:
+		Pointer<AutoResetEventHandle> m_waitEvent;
+	};
+}
+#endif //__AUTORESETEVENT_H__

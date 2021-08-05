@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\action.h" />
+    <ClInclude Include="core\algorithm.h" />
+    <ClInclude Include="core\algorithm_inl.hpp" />
+    <ClInclude Include="core\array.h" />
+    <ClInclude Include="core\array_inl.hpp" />
+    <ClInclude Include="core\autoresetevent.h" />
+    <ClInclude Include="core\color.h" />
+    <ClInclude Include="core\convert.h" />
+    <ClInclude Include="core\core.h" />
+    <ClInclude Include="core\core_inl.hpp" />
+    <ClInclude Include="core\csv.h" />
+    <ClInclude Include="core\data_stream.h" />
+    <ClInclude Include="core\data_stream_inl.hpp" />
+    <ClInclude Include="core\delegate.h" />
+    <ClInclude Include="core\dictionary.h" />
+    <ClInclude Include="core\dlladmin.h" />
+    <ClInclude Include="core\dllapi.h" />
+    <ClInclude Include="core\element.h" />
+    <ClInclude Include="core\elemmatrix.h" />
+    <ClInclude Include="core\geometry.h" />
+    <ClInclude Include="core\image.h" />
+    <ClInclude Include="core\image_process.h" />
+    <ClInclude Include="core\interface.h" />
+    <ClInclude Include="core\mat.h" />
+    <ClInclude Include="core\mat_inl.hpp" />
+    <ClInclude Include="core\mult_thread.h" />
+    <ClInclude Include="core\mult_thread_inl.hpp" />
+    <ClInclude Include="core\operator.h" />
+    <ClInclude Include="core\parse_templates_inl.h" />
+    <ClInclude Include="core\point.h" />
+    <ClInclude Include="core\pointer.h" />
+    <ClInclude Include="core\point_inl.hpp" />
+    <ClInclude Include="core\signal.h" />
+    <ClInclude Include="core\structure.h" />
+    <ClInclude Include="core\structure_inl.hpp" />
+    <ClInclude Include="core\tools.h" />
+    <ClInclude Include="core\tools_inl.hpp" />
+    <ClInclude Include="core\type.h" />
+    <ClInclude Include="core\vector.h" />
+    <ClInclude Include="core\vector_inl.hpp" />
+    <ClInclude Include="json\fifo_map.hpp" />
+    <ClInclude Include="json\json.h" />
+    <ClInclude Include="json\json_inl.hpp" />
+    <ClInclude Include="lzh.h" />
+    <ClInclude Include="net\activation.h" />
+    <ClInclude Include="net\batchnormalization.h" />
+    <ClInclude Include="net\convolution.h" />
+    <ClInclude Include="net\costfunction.h" />
+    <ClInclude Include="net\dropout.h" />
+    <ClInclude Include="net\fullconnection.h" />
+    <ClInclude Include="net\layer.h" />
+    <ClInclude Include="net\net.h" />
+    <ClInclude Include="net\net_core.h" />
+    <ClInclude Include="net\nn.h" />
+    <ClInclude Include="net\nnapi.h" />
+    <ClInclude Include="net\optimalize.h" />
+    <ClInclude Include="net\pool.h" />
+    <ClInclude Include="net\prelu.h" />
+    <ClInclude Include="net\reshape.h" />
+    <ClInclude Include="net\softmax.h" />
+    <ClInclude Include="net\train.h" />
+    <ClInclude Include="net\traindata.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\algorithm.cpp" />
+    <ClCompile Include="core\array.cpp" />
+    <ClCompile Include="core\autoresetevent.cpp" />
+    <ClCompile Include="core\color.cpp" />
+    <ClCompile Include="core\convert.cpp" />
+    <ClCompile Include="core\core.cpp" />
+    <ClCompile Include="core\csv.cpp" />
+    <ClCompile Include="core\data_stream.cpp" />
+    <ClCompile Include="core\dlladmin.cpp" />
+    <ClCompile Include="core\dllapi.cpp" />
+    <ClCompile Include="core\element.cpp" />
+    <ClCompile Include="core\elemmatrix.cpp" />
+    <ClCompile Include="core\geometry.cpp" />
+    <ClCompile Include="core\image.cpp" />
+    <ClCompile Include="core\image_process.cpp" />
+    <ClCompile Include="core\interface.cpp" />
+    <ClCompile Include="core\mat.cpp" />
+    <ClCompile Include="core\operator.cpp" />
+    <ClCompile Include="core\pointer.cpp" />
+    <ClCompile Include="core\structure.cpp" />
+    <ClCompile Include="core\tools.cpp" />
+    <ClCompile Include="core\vector.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="net\activation.cpp" />
+    <ClCompile Include="net\batchnormalization.cpp" />
+    <ClCompile Include="net\convolution.cpp" />
+    <ClCompile Include="net\costfunction.cpp" />
+    <ClCompile Include="net\dropout.cpp" />
+    <ClCompile Include="net\fullconnection.cpp" />
+    <ClCompile Include="net\layer.cpp" />
+    <ClCompile Include="net\net.cpp" />
+    <ClCompile Include="net\nnapi.cpp" />
+    <ClCompile Include="net\optimalize.cpp" />
+    <ClCompile Include="net\pool.cpp" />
+    <ClCompile Include="net\prelu.cpp" />
+    <ClCompile Include="net\reshape.cpp" />
+    <ClCompile Include="net\softmax.cpp" />
+    <ClCompile Include="net\train.cpp" />
+    <ClCompile Include="net\traindata.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{64DCCC18-940B-45BE-8A41-363CB49D2274}</ProjectGuid>
+    <RootNamespace>VisionBackEnd</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>BaseRuntime</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>.\opengl\include;$(IncludePath)</IncludePath>
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>.\opengl\lib\x64;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>.\opengl\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\opengl\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\x86\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)bin\x86\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAsManaged>
+      </CompileAsManaged>
+      <AdditionalOptions>
+      </AdditionalOptions>
+    </ClCompile>
+    <Link />
+    <Link>
+      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAsManaged>
+      </CompileAsManaged>
+      <AdditionalOptions>
+      </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>freeglut.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
