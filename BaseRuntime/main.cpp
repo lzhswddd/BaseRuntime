@@ -17,12 +17,12 @@ public:
 int main()
 {
 	lzh::Srandom();
-	Action<int> a;
-	a += [](int v) {output(v); };
-	a += [](int v) {output(v); };
-	a += [](int v) {output(v); };
-	a(2);
-	/*A a;
+	//Action<int> a;
+	//a += [](int v) {output(v); };
+	//a += [](int v) {output(v); };
+	//a += [](int v) {output(v); };
+	//a(2);
+	A a;
 	Delegate<bool()> signal = Connect(&a, &A::f);
 	AutoResetEvent ev(false);
 	thread th([&](){
@@ -38,7 +38,7 @@ int main()
 	ev.WaitOne(-1);
 	output("pass");
 
-	if(th.joinable())th.join();*/
+	if(th.joinable())th.join();
 
 
 	//Image img = Image::zeros(Size3(1270, 720, 3), TP_8U);
