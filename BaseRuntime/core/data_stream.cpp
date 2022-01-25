@@ -90,12 +90,7 @@ std::ostream & lzh::operator<<(std::ostream & out, const Element & element)
 
 std::ostream & lzh::operator<<(std::ostream & out, const TimeData & timeData)
 {
-	out << timeData.year << "."
-		<< timeData.day << "."
-		<< timeData.h << "."
-		<< timeData.m << "."
-		<< timeData.s << "."
-		<< timeData.ms << "ms";
+	out << timeData.toString();
 	return out;
 }
 

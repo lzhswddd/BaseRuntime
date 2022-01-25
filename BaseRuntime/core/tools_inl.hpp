@@ -1,3 +1,4 @@
+#include "tools.h"
 template<typename _Tp> void lzh::output(const _Tp &t)
 {
 	std::cout << t << std::endl;

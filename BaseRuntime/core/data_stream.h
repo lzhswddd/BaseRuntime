@@ -2,7 +2,11 @@
 #ifndef _DATA_STREAM_H__
 #define _DATA_STREAM_H__
 #include <iostream>
-#include "../lzh.h"
+#include "interface.h"
+#include "structure.h"
+#include "convert.h"
+#include "element.h"
+#include "tools.h"
 
 namespace lzh
 {

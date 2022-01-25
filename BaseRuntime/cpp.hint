@@ -3,3 +3,5 @@
 // 有关详细信息，请参见 https://go.microsoft.com/fwlink/?linkid=865984
 #define GET_VALUE(type, v) (*(type*)(v))
 #define GET_VALUE(type, fun) type& fun();const type& fun()const
+#define DESERIALIZE static value_type deserialize(const lzh::Json& json)
+#define GEN_VALUE

@@ -17,7 +17,6 @@ namespace lzh {
 		};
 	};
 
-
 	template<typename T>
 	struct TEMPLATE_API function_traits;
 	// R为返回类型

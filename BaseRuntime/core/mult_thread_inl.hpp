@@ -1,4 +1,4 @@
-#include "mult_thread.h"
+
 template<typename _Tp> inline lzh::MultThread<_Tp>::MultThread(int threadNum)
     : taskQueue(nullptr), thread(nullptr), threadID(nullptr), threadState(nullptr)
 {
@@ -145,6 +145,6 @@ template<typename _Tp> inline void lzh::MultThread<_Tp>::init(int threadNum)
     length = threadNum;
     gapTime = 0;
     finish = true;
+    terminate = false;
     Process = Action<_Tp>();
 }
-

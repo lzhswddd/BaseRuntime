@@ -2,6 +2,8 @@
 #define __IMAGE_H__
 
 #include "interface.h"
+#include "imageio.h"
+#include "tools.h"
 
 #define OPENGL_
 
@@ -20,4 +22,34 @@ namespace lzh
 	extern LZHAPI void show();
 	extern LZHAPI void destroyAllWindows();
 }
+
+template<>
+class ImageIODevice<lzh::Image> : public ImageIOSupprt<lzh::Image>
+{
+public:
+	using ImageType = lzh::Image;
+	ImageIODevice() :ImageIOSupprt<ImageType>() {}
+	ImageIODevice(ImageType* image) :ImageIOSupprt<ImageType>(image) {}
+	void GetSize(int& width, int& height) {
+		width = image->cols;
+		height = image->rows;
+	}
+	void GetChannel(int& channel) { channel = image->channels(); }
+	void GenSize(int width, int height, int channel) { image->create(width, height, channel, lzh::TP_8U); }
+	void CopyPart(const ImageType& part, int x, int y, int width, int height) {
+		part.setTo(image->range(lzh::Rect(x, y, width, height)));
+	}
+	void CropPart(ImageType& part, int x, int y, int width, int height) {
+		part = image->range(lzh::Rect(x, y, width, height)).clone();
+	}
+	static bool deserialize(const std::string& path, ImageType& image) {
+		image = lzh::imread(path);
+		return !image.empty();
+	}
+	static bool serialize(const std::string& path, const ImageType& image) {
+		if (image.empty())return false;
+		lzh::imwrite(path, image);
+		return lzh::isExists(path);
+	}
+};
 #endif // !__IMAGE_H__

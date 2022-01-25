@@ -26,10 +26,10 @@ namespace lzh
 	template<typename _Tp> struct TEMPLATE_API PointerInterFace
 	{
 		using value_type = typename _Tp;
-		bool Custom() { return false; }
-		_Tp* Create() { return new _Tp(); }
-		template<typename ...Args> _Tp* Create(const Args & ... argv) { return new _Tp(argv...); }
-		void Release(_Tp* ptr) { FREE_PTR(ptr); }
+		static bool Custom() { return false; }
+		static _Tp* Create() { return new _Tp(); }
+		template<typename ...Args> static _Tp* Create(const Args & ... argv) { return new _Tp(argv...); }
+		static void Release(_Tp* ptr) { FREE_PTR(ptr); }
 	};
 
 	template<typename _Tp> class TEMPLATE_API Pointer : public RefCountPointer
@@ -89,8 +89,7 @@ namespace lzh
 	template<typename _Tp> inline Pointer<_Tp> & Pointer<_Tp>::operator=(const Pointer<_Tp> & p)
 	{
 		if (this == &p)return *this;
-		if (last())
-			delete data;
+		release();
 		assign(p.refcount);
 		data = p.data;
 		return *this;
@@ -99,7 +98,7 @@ namespace lzh
 		: data(nullptr), RefCountPointer() 
 	{
 		release(); 
-		data = PointerInterFace<_Tp>().Create(param...);
+		data = PointerInterFace<_Tp>::Create(param...);
 		RefCountPointer::create();
 	}
 	template<typename _Tp> inline Pointer<_Tp>::~Pointer() { release(); }
@@ -122,7 +121,7 @@ namespace lzh
 	//	release(); data = new _Tp(param...); RefCountPointer::create();
 	//}
 	template<typename _Tp> inline void Pointer<_Tp>::release() noexcept {
-		if (last())PointerInterFace<_Tp>().Release(data); RefCountPointer::release(); data = nullptr;
+		if (last())PointerInterFace<_Tp>::Release(data); RefCountPointer::release(); data = nullptr;
 	}
 	template<typename _Tp> inline _Tp * Pointer<_Tp>::Ptr() {
 		return data;
@@ -240,12 +239,12 @@ namespace lzh
 
 	template<typename _Tp> inline Pointer<_Tp> AllocNone()
 	{
-		return PointerInterFace<_Tp>().Create();
+		return PointerInterFace<_Tp>::Create();
 	}
 
 	template<typename _Tp, typename ..._Ty> inline Pointer<_Tp> AllocArgv(const _Ty & ...param)
 	{
-		return PointerInterFace<_Tp>().Create(param...);
+		return PointerInterFace<_Tp>::Create(param...);
 	}
 
 	/*template<> class TEMPLATE_API Pointer<void> : public RefCountPointer

@@ -216,6 +216,15 @@
     <ClInclude Include="core\delegate.h">
       <Filter>core\include</Filter>
     </ClInclude>
+    <ClInclude Include="core\imageio.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json_support.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="core\base.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\algorithm.cpp">

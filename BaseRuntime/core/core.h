@@ -436,10 +436,10 @@ namespace lzh
 	static const uint32 TypeMemSize[] = { 0,1,1,2,2,4,4,8,8,4,8,8 };
 	static const int8 * TypeString[] = {
 		"unknow",
-		"int8",		"uint8",
-		"int16",	"uint16",
-		"int32",	"uint32",
-		"int64",	"uint64",
+		"uint8",	"int8",
+		"uint16",	"int16",
+		"uint32",	"int32",
+		"uint64",	"int64",
 		"float32",	"float64", "float64"
 	};
 	class LZHAPI Null {};
@@ -490,7 +490,7 @@ namespace lzh
 	{
 	public:
 		typedef int32 value_type;
-		enum { type = TP_32S };
+		enum { type = TP_32U };
 		const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<float32>

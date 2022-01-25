@@ -22,9 +22,26 @@ namespace lzh
 		~DictItem() {}
 		DictItem(const DictItem<_Tp> &item) : _obj(), node(nullptr) { *this = item; }
 		//DictItem(DictItem<_Tp> &&item) : _obj(), node(nullptr) { *this = item; }
-		DictItem& operator = (const DictItem<_Tp> &item);
-		DictItem& operator = (const Element &item);
-		DictItem& operator = (const ElemList &item);
+		DictItem& operator = (const DictItem<_Tp> &item) {
+			if (this == &item)return *this;
+			node = item.node;
+			_obj = item._obj;
+			return *this;
+		}
+		DictItem& operator = (const Element &item) {
+			if ((void*)this == (void*)&item)return *this;
+			if (!node.empty())node.release();
+			if (!_obj.empty())_obj.over(item);
+			else _obj.create(item);
+			return *this;
+		}
+		DictItem& operator = (const ElemList &items) {
+			if ((void*)this == (void*)&items)return *this;
+			if (!node.empty())node.release();
+			if (!_obj.empty())_obj.over(items);
+			else _obj.create(items);
+			return *this;
+		}
 
 		bool empty()const { return _obj.Data().empty(); }
 		size_t size()const {
@@ -32,20 +49,46 @@ namespace lzh
 			else return (size_t)_obj.Data().len();
 		}
 
-		iterator begin();
-		const_iterator begin()const;
-		iterator end();
-		const_iterator end()const;
-		iterator find(const _Tp & key);
-		const_iterator find(const _Tp & key)const;
+		iterator begin() {
+			if (isParent()) { return dict().begin(); }
+			else return DictItem<_Tp>::iterator();
+		}
+		const_iterator begin()const {
+			if (isParent()) { return dict().begin(); }
+			else return DictItem<_Tp>::const_iterator();
+		}
+		iterator end() {
+			if (isParent()) { return dict().end(); }
+			else return DictItem<_Tp>::iterator();
+		}
+		const_iterator end()const {
+			if (isParent()) { return dict().end(); }
+			else return DictItem<_Tp>::const_iterator();
+		}
+		iterator find(const _Tp & key) {
+			if (isParent()) { return dict().find(key); }
+			else return DictItem<_Tp>::iterator();
+		}
+		const_iterator find(const _Tp & key)const {
+			if (isParent()) { return dict().find(key); }
+			else return DictItem<_Tp>::const_iterator();
+		}
 
 		bool isParent()const noexcept { return node.empty() ? false : node.Data() != nullptr; }
 		template<typename _Ty> _Ty& Data()const {
 			return _obj.Data().toData<_Ty>();
 		}
-		DictItem & at(const _Tp & key);
-		const DictItem & at(const _Tp & key)const;
-		DictItem &operator [](const _Tp & key);
+		DictItem & at(const _Tp & key) {
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>().at(key);
+		}
+		const DictItem & at(const _Tp & key)const {
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>().at(key);
+		}
+		DictItem &operator [](const _Tp & key) {
+			if (node.Data() == nullptr)
+				GenDict();
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>()[key];
+		}
 		template<typename _Ty> operator _Ty& () {
 			return _obj.Data();
 		}
@@ -91,8 +134,12 @@ namespace lzh
 		std::string String()const { return _obj.Data().toString(); }
 		ElemList List()const { return _obj.Data().toList(); }
 
-		Dict<_Tp, DictItem<_Tp>> & dict();
-		const Dict<_Tp, DictItem<_Tp>> & dict()const;
+		Dict<_Tp, DictItem<_Tp>> & dict() {
+			return (_obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>());
+		}
+		const Dict<_Tp, DictItem<_Tp>> & dict()const {
+			return (_obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>());
+		}
 		Dict<_Tp, DictItem<_Tp>> * d_ptr() { return node.Data(); }
 		const Dict<_Tp, DictItem<_Tp>> * d_ptr()const { return node.Data(); }
 
@@ -192,77 +239,170 @@ namespace lzh
 	//template<typename _Tp> inline std::ostream & operator << (std::ostream & out, const Dict<_Tp> &dict) {
 	//	Dict<_Tp>::Ergodic(dict, out, Dict<_Tp>::ShowNode); return out;
 	//}
-	template<typename _Tp> inline typename DictItem<_Tp>::iterator DictItem<_Tp>::begin() {
-		if (isParent()) { return dict().begin(); }
-		else return DictItem<_Tp>::iterator();
-	}
-	template<typename _Tp> inline typename DictItem<_Tp>::const_iterator DictItem<_Tp>::begin() const {
-		if (isParent()) { return dict().begin(); }
-		else return DictItem<_Tp>::iterator();
-	}
-	template<typename _Tp> inline typename DictItem<_Tp>::iterator DictItem<_Tp>::end() {
-		if (isParent()) { return dict().end(); }
-		else return DictItem<_Tp>::iterator();
-	}
-	template<typename _Tp> inline typename DictItem<_Tp>::const_iterator DictItem<_Tp>::end() const {
-		if (isParent()) { return dict().end(); }
-		else return DictItem<_Tp>::iterator();
-	}
-	template<typename _Tp> inline typename DictItem<_Tp>::iterator DictItem<_Tp>::find(const _Tp & key) {
-		if (isParent()) { return dict().find(key); }
-		else return DictItem<_Tp>::iterator();
-	}
-	template<typename _Tp> inline typename DictItem<_Tp>::const_iterator DictItem<_Tp>::find(const _Tp & key) const {
-		if (isParent()) { return dict().find(key); }
-		else return DictItem<_Tp>::iterator();
-	}
-	template<typename _Tp> inline DictItem<_Tp> & DictItem<_Tp>::operator=(const DictItem<_Tp>& item)
-	{
-		if (this == &item)return *this;
-	    node = item.node;
-		_obj = item._obj;
-		return *this;
-	}
-	template<typename _Tp> inline DictItem<_Tp> & DictItem<_Tp>::operator=(const Element & item)
-	{
-		if ((void*)this == (void*)&item)return *this;
-		if (!node.empty())node.release();
-		if (!_obj.empty())_obj.over(item);
-		else _obj.create(item);
-		return *this;
-	}
-	template<typename _Tp> inline DictItem<_Tp> & DictItem<_Tp>::operator=(const ElemList & items)
-	{
-		if ((void*)this == (void*)&items)return *this;
-		if (!node.empty())node.release();
-		if (!_obj.empty())_obj.over(items);
-		else _obj.create(items);
-		return *this;
-	}
-	template<typename _Tp> inline DictItem<_Tp> & DictItem<_Tp>::at(const _Tp & key) {
-		return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>().at(key);
-	}
-	template<typename _Tp> inline const DictItem<_Tp> & DictItem<_Tp>::at(const _Tp & key)const {
-		return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>().at(key);
-	}
-	template<typename _Tp> inline DictItem<_Tp> & DictItem<_Tp>::operator[](const _Tp & key)
-	{
-		if (node.Data() == nullptr)
-			GenDict();
-		return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>()[key];
-	}
-	template<typename _Tp> inline Dict<_Tp, DictItem<_Tp>>& DictItem<_Tp>::dict()
-	{
-		return (_obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>());
-	}
-	template<typename _Tp> inline const Dict<_Tp, DictItem<_Tp>>& DictItem<_Tp>::dict() const
-	{
-		return (_obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>());
-	}
 	template<typename _Tp> std::ostream & operator << (std::ostream &out, const DictItem<_Tp> &item)
 	{
-		out << item.Elem(); return out;
+		if (item.isParent()) {
+			size_t i = 0;
+			size_t size = item.size();
+			for (auto iter : item) {
+				out << iter.first << " " << iter.second;
+				if (i != size - 1) {
+					out << std::endl;
+				}
+				i += 1;
+			}
+		}
+		else out << item.Elem(); 
+		return out;
 	}
+	/****************************************************************************************************/
+	template<> class TEMPLATE_API DictItem<std::string>
+	{
+	public:
+		using _Tp = typename std::string;
+		using iterator = typename Dict<_Tp, DictItem<_Tp>>::iterator;
+		using const_iterator = typename Dict<_Tp, DictItem<_Tp>>::const_iterator;
+
+		DictItem() : _obj(), node(nullptr) {}
+		DictItem(const Element& item) : _obj(item), node(nullptr) {}
+		~DictItem() {}
+		DictItem(const DictItem<_Tp>& item) : _obj(), node(nullptr) { *this = item; }
+		//DictItem(DictItem<_Tp> &&item) : _obj(), node(nullptr) { *this = item; }
+		DictItem& operator = (const DictItem<_Tp>& item) {
+			if (this == &item)return *this;
+			node = item.node;
+			_obj = item._obj;
+			return *this;
+		}
+		DictItem& operator = (const Element& item) {
+			if ((void*)this == (void*)&item)return *this;
+			if (!node.empty())node.release();
+			if (!_obj.empty())_obj.over(item);
+			else _obj.create(item);
+			return *this;
+		}
+		DictItem& operator = (const ElemList& items) {
+			if ((void*)this == (void*)&items)return *this;
+			if (!node.empty())node.release();
+			if (!_obj.empty())_obj.over(items);
+			else _obj.create(items);
+			return *this;
+		}
+
+		bool empty()const { return _obj.Data().empty(); }
+		size_t size()const {
+			if (isParent())return dict().size();
+			else return (size_t)_obj.Data().len();
+		}
+
+		iterator begin() {
+			if (isParent()) { return dict().begin(); }
+			else return DictItem<_Tp>::iterator();
+		}
+		const_iterator begin()const {
+			if (isParent()) { return dict().begin(); }
+			else return DictItem<_Tp>::const_iterator();
+		}
+		iterator end() {
+			if (isParent()) { return dict().end(); }
+			else return DictItem<_Tp>::iterator();
+		}
+		const_iterator end()const {
+			if (isParent()) { return dict().end(); }
+			else return DictItem<_Tp>::const_iterator();
+		}
+		iterator find(const _Tp& key) {
+			if (isParent()) { return dict().find(key); }
+			else return DictItem<_Tp>::iterator();
+		}
+		const_iterator find(const _Tp& key)const {
+			if (isParent()) { return dict().find(key); }
+			else return DictItem<_Tp>::const_iterator();
+		}
+
+		bool isParent()const noexcept { return node.empty() ? false : node.Data() != nullptr; }
+		template<typename _Ty> _Ty& Data()const {
+			return _obj.Data().toData<_Ty>();
+		}
+		DictItem& at(const _Tp& key) {
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>().at(key);
+		}
+		const DictItem& at(const _Tp& key)const {
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>().at(key);
+		}
+		DictItem& operator [](const char* key) {
+			if (node.Data() == nullptr)
+				GenDict();
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>()[key];
+		}
+		DictItem& operator [](const _Tp& key) {
+			if (node.Data() == nullptr)
+				GenDict();
+			return _obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>()[key];
+		}
+		template<typename _Ty> operator _Ty& () {
+			return _obj.Data();
+		}
+		template<typename _Ty> operator const _Ty& () const {
+			return _obj.Data();
+		}
+
+		template<typename _Ty> bool operator == (const _Ty& elem)const {
+			return _obj.Data() == elem;
+		}
+		template<typename _Ty> bool operator != (const _Ty& elem)const {
+			return _obj.Data() != elem;
+		}
+		template<typename _Ty> bool operator > (const _Ty& elem)const {
+			return _obj.Data() > elem;
+		}
+		template<typename _Ty> bool operator >= (const _Ty& elem)const {
+			return _obj.Data() >= elem;
+		}
+		template<typename _Ty> bool operator <= (const _Ty& elem)const {
+			return _obj.Data() <= elem;
+		}
+		template<typename _Ty> bool operator < (const _Ty& elem)const {
+			return _obj.Data() < elem;
+		}
+
+		void GenDict() {
+			if (node.Data() == nullptr)
+			{
+				node.Data() = new Dict<_Tp, DictItem<_Tp>>();
+				if (!_obj.empty())_obj.over(node.Data());
+				else _obj.create(node.Data());
+			}
+		}
+
+		Element& Elem() { return _obj.Data(); }
+		const Element& Elem()const { return _obj.Data(); }
+		bool Bool()const { return _obj.Data().tobool(); }
+		int Int()const { return _obj.Data().toInt(); }
+		float Float()const { return _obj.Data().toFloat(); }
+		double Double()const { return _obj.Data().toDouble(); }
+		Value Val()const { return _obj.Data().toValue(); }
+		std::string String()const { return _obj.Data().toString(); }
+		ElemList List()const { return _obj.Data().toList(); }
+
+		Dict<_Tp, DictItem<_Tp>>& dict() {
+			return (_obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>());
+		}
+		const Dict<_Tp, DictItem<_Tp>>& dict()const {
+			return (_obj.Data().toData<Dict<_Tp, DictItem<_Tp>>>());
+		}
+		Dict<_Tp, DictItem<_Tp>>* d_ptr() { return node.Data(); }
+		const Dict<_Tp, DictItem<_Tp>>* d_ptr()const { return node.Data(); }
+
+		Element* operator ->() { return _obj.Ptr(); }
+		const Element* operator ->()const { return _obj.Ptr(); }
+		Element& operator *() { return Elem(); }
+		const Element& operator *()const { return Elem(); }
+	private:
+		Pointer<Dict<_Tp, DictItem<_Tp>>*> node;
+		Pointer<Element> _obj;
+	};
+	/****************************************************************************************************/
 }
 
 #endif // !__DICTIONARY_H__

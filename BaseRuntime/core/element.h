@@ -5,6 +5,8 @@
 #include "interface.h"
 #include "pointer.h"
 #include "parse_templates_inl.h"
+#include "structure.h"
+#include "convert.h"
 #include <functional>
 #include <map>
 
@@ -773,27 +775,22 @@ namespace lzh
 		const Data* pointer()const;
 	};
 
+	template<typename _Tp> struct TEMPLATE_API ElemSupport {
+		using value_type = typename _Tp;
+		static bool Custom() { return false; }
+		static Element Convert(const _Tp& val) { return val; }
+		static _Tp Convert(const Element& val) { return val; }
+	};
 
-	template<typename _Tp> struct TEMPLATE_API ElemConvertType {
-		using value_type = typename _Tp;
-		bool Custom() { return false; }
-		_Tp Convert(const Element& val) { return val; }
-	};
-	template<typename _Tp> struct TEMPLATE_API ConvertElemType {
-		using value_type = typename _Tp;
-		bool Custom() { return false; }
-		Element Convert(const _Tp& val) { return val; }
-	};
 	extern LZHAPI const Element& noElem();
 	extern LZHAPI Element MakeElem(const std::initializer_list<Element>& list);
 	template<typename R, typename ...Params> TEMPLATE_API Element Func(R(*v)(Params...)) {
 		Element elem; elem.set(Element::FUNCTION, v, typeid(v).name()); return elem;
 	}
-	template<typename _Tp> inline Element::Element(const _Tp * v) : _type(INTPTR), _typeName(typeid(v).name()) { data_ptr = ptr.user = (void*)v; }
-		template<typename _Tp> inline Element::Element(const _Tp & v) : _type(InValid), _typeName(typeid(v).name()) { 
-		ConvertElemType<_Tp> ConvertMachine;
-		if (ConvertMachine.Custom()) {
-			*this = ConvertMachine.Convert(v);
+	template<typename _Tp> inline Element::Element(const _Tp* v) : _type(INTPTR), _typeName(typeid(v).name()) { data_ptr = ptr.user = (void*)v; }
+	template<typename _Tp> inline Element::Element(const _Tp& v) : _type(InValid), _typeName(typeid(v).name()) {
+		if (ElemSupport<_Tp>::Custom()) {
+			*this = ElemSupport<_Tp>::Convert(v);
 		}
 		else {
 			data_ptr = ptr.user = (void*)&v;
@@ -841,9 +838,8 @@ namespace lzh
 	}
 	using ElemList = typename std::vector<Element>;
 	template<typename _Tp> inline Element& lzh::Element::operator=(const _Tp& val) { 
-		ConvertElemType<_Tp> ConvertMachine;
-		if (ConvertMachine.Custom()) {
-			*this = ConvertMachine.Convert(val);
+		if (ElemSupport<_Tp>::Custom()) {
+			*this = ElemSupport<_Tp>::Convert(val);
 		}
 		else {
 			*this = Element(val);
@@ -943,9 +939,8 @@ namespace lzh
 		return toData<_Tp>();
 	}
 	template<typename _Tp> inline _Tp Element::to() {
-		ElemConvertType<_Tp> ConvertMachine;
-		if (ConvertMachine.Custom()) {
-			return ConvertMachine.Convert(*this);
+		if (ElemSupport<_Tp>::Custom()) {
+			return ElemSupport<_Tp>::Convert(*this);
 		}
 		else {
 			LZH_ACCESS(if (_type == INTPTR || _type == ElemType<_Tp>::type), THROW_TYPE_INFO(typeid(_Tp).name(), typeName()));
@@ -953,9 +948,8 @@ namespace lzh
 		}
 	}
 	template<typename _Tp> inline const _Tp Element::to() const {
-		ElemConvertType<_Tp> ConvertMachine;
-		if (ConvertMachine.Custom()) {
-			return ConvertMachine.Convert(*this);
+		if (ElemSupport<_Tp>::Custom()) {
+			return ElemSupport<_Tp>::Convert(*this);
 		}
 		else {
 			LZH_ACCESS(if (_type == INTPTR || _type == ElemType<_Tp>::type), THROW_TYPE_INFO(typeid(_Tp).name(), typeName()));

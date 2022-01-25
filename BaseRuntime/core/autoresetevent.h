@@ -18,9 +18,9 @@ namespace lzh
 	template<> struct TEMPLATE_API PointerInterFace<AutoResetEventHandle>
 	{
 		using value_type = typename AutoResetEventHandle;
-		bool Custom() { return true; }
-		AutoResetEventHandle* Create(bool bManualReset) { AutoResetEventHandle* handle = new AutoResetEventHandle(); handle->create(bManualReset); return handle; }
-		void Release(AutoResetEventHandle* ptr) { ptr->release(); }
+		static bool Custom() { return true; }
+		static AutoResetEventHandle* Create(bool bManualReset) { AutoResetEventHandle* handle = new AutoResetEventHandle(); handle->create(bManualReset); return handle; }
+		static void Release(AutoResetEventHandle* ptr) { ptr->release(); }
 	};
 	class LZHAPI AutoResetEvent
 	{

@@ -2,11 +2,37 @@
 #include "tools.h"
 #include <iostream>
 #include <fstream>
+#include <sstream >
 using namespace lzh;
 
 /****************************************************************************
 其他工具
 *****************************************************************************/
+std::string lzh::TimeData::toString()const
+{
+	std::stringstream out;
+	out << year << "/"
+		<< month << "/"
+		<< day << " "
+		<< h << ":"
+		<< m << ": "
+		<< s << "."
+		<< ms << "s";
+	return out.str();
+}
+
+std::string lzh::TimeData::toTime() const
+{
+	std::stringstream out;
+	out << 1900 + year << "/"
+		<< 1 + month << "/"
+		<< day << " "
+		<< h << ":"
+		<< m << ":"
+		<< s;
+	return out.str();
+}
+
 std::string lzh::getFileName(std::string filename)
 {
 	auto idx = filename.rfind('\\');
@@ -920,6 +946,20 @@ std::string lzh::Type2String(int32 type)
 /****************************************************************************
 计时器
 *****************************************************************************/
+#include <ctime>
+LZHAPI TimeData lzh::NowTime()
+{
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+	TimeData timeData;
+	timeData.year =  ltm->tm_year;
+	timeData.month = ltm->tm_mon;
+	timeData.day = ltm->tm_mday;
+	timeData.h = ltm->tm_hour;
+	timeData.m = ltm->tm_min;
+	timeData.s = ltm->tm_sec;
+	return timeData;
+}
 #if defined(__linux__)
 #include <sys/time.h>
 #include <unistd.h>
@@ -940,12 +980,11 @@ void Timer::Start()
 mat_t Timer::End()
 {
 	gettimeofday((struct timeval*)end, NULL);
-	return _T(((struct timeval*)end->tv_sec - (struct timeval*)start->tv_sec) * 1000.0 + (struct timeval*)end->tv_usec - (struct timeval*)start->tv_usec);
+	return uint64(((struct timeval*)end->tv_sec - (struct timeval*)start->tv_sec) * 1000.0 + (struct timeval*)end->tv_usec - (struct timeval*)start->tv_usec);
 }
 TimeData lzh::Timer::EndTime()
 {
-	mat_t v = End();
-	return TimeData();
+	return TimeData(End());
 }
 static struct timeval t1, t2;
 void lzh::StartCounter()
@@ -964,7 +1003,7 @@ void lzh::Wait(uint ms)
 #elif defined(_WIN32)
 #include <windows.h>  
 #include <io.h>
-#include <direct.h>  
+#include <direct.h>
 Timer::Timer()
 {
 	start = new LARGE_INTEGER();
@@ -982,10 +1021,10 @@ void Timer::Start()
 {
 	QueryPerformanceCounter((LARGE_INTEGER*)start);
 }
-mat_t Timer::End()
+uint64 Timer::End()
 {
 	QueryPerformanceCounter((LARGE_INTEGER*)end);
-	return _T(((((LARGE_INTEGER*)end)->QuadPart - ((LARGE_INTEGER*)start)->QuadPart) * 1000.0) / ((LARGE_INTEGER*)fc)->QuadPart);
+	return lzh::saturate_cast<uint64>(((((LARGE_INTEGER*)end)->QuadPart - ((LARGE_INTEGER*)start)->QuadPart) * 1000000.0) / ((LARGE_INTEGER*)fc)->QuadPart);
 }
 TimeData Timer::EndTime()
 {

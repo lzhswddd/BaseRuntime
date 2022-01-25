@@ -10,7 +10,7 @@
 		lzh::Timer _timer_;\
 		_timer_.Start();\
 		function;\
-		print(0x0002, "running function %s -> cast time is %0.4f sec\n", STR2(function), _timer_.End() / 1000);\
+		print(0x0002, "running function %s -> cast time is %0.4f sec\n", STR2(function), _timer_.End() / 1000000.0);\
 		}while(0)
 
 namespace lzh
@@ -18,31 +18,40 @@ namespace lzh
 	class LZHAPI TimeData
 	{
 	public:
-		TimeData(mat_t t) : t(t) {
-			us = uint32(int32(t * 1000) % 1000);
-			ms = uint32(int32(t) % 1000);
-			s = uint32(int32(t / 1000) % 60);
-			m = uint32(int32(t / 1000) / 60 % 60);
-			h = uint32(int32(t / 1000) / 3600 % 60);
-			day = uint32(int32(t / 1000) / (3600 * 24) % 360);
-			year = uint32(int32(t / 1000) / (3600 * 24 * 360));
+		TimeData(){
+			memset(this, 0, sizeof(TimeData));
+		}
+		TimeData(uint64 t) : t(t) {
+			us = uint32((t * 1000) % 1000);
+			ms = uint32((t) % 1000);
+			s = uint32((t / 1000) % 60);
+			m = uint32((t / 1000) / 60 % 60);
+			h = uint32((t / 1000) / 3600 % 60);
+			day = uint32((t / 1000) / (3600 * 24) % 31);
+			month = 0;
+			year = 0;
 		}
 		uint32 year;
+		uint32 month;
 		uint32 day;
 		uint32 h;
 		uint32 m;
 		uint32 s;
 		uint32 ms;
 		uint32 us;
-		mat_t t;
+		uint64 t;
+
+		std::string toString()const;
+		std::string toTime()const;
 	};
+	extern LZHAPI TimeData NowTime();
 	class LZHAPI Timer
 	{
 	public:
 		Timer();
 		~Timer();
 		void Start();
-		mat_t End();
+		uint64 End();
 		TimeData EndTime();
 	protected:
 		void* start;
