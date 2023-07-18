@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{8004e3c3-5be3-4779-914c-7e35b5d9a51f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\include">
+      <UniqueIdentifier>{a41a7693-4473-4212-b6a2-4a8792cce35a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\source">
+      <UniqueIdentifier>{c85afaa7-9f6a-4f66-8630-873aa3c2cb9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{d9ad9cfb-6af9-4192-b38a-36c03f4ed63f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{2eaa33c2-e0af-476f-9956-aea2161a0801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="camera">
+      <UniqueIdentifier>{0b5d9770-3316-48ca-b0f3-34b3f84ed7da}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\color.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\core.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\image.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\image_process.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\interface.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\mat.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\point.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\structure.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\tools.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\type.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\vector.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\core_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\mat_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\point_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\structure_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\tools_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\vector_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="lzh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="core\array.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\array_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\operator.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\element.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\dlladmin.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\dllapi.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\dictionary.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\convert.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\pointer.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="json\fifo_map.hpp">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json_inl.hpp">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="core\algorithm.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\algorithm_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\data_stream.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\data_stream_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\geometry.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\parse_templates_inl.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\csv.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\elemmatrix.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\mult_thread.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\mult_thread_inl.hpp">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\action.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\signal.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="net\activation.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\batchnormalization.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\convolution.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\costfunction.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\dropout.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\fullconnection.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\layer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\net.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\net_core.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\nn.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\nnapi.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\optimalize.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\pool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\prelu.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\reshape.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\softmax.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\train.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\traindata.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="core\autoresetevent.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\delegate.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\imageio.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json_support.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="core\base.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\base64.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\eventhandler.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\BaseCamera.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\CameraSupport.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\LocalCamera.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\ReceiveDevice.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="core\runnable.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threadpool.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threadpoolprivate.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threadprivate.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\container.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\timer.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\thread.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threadlock.h">
+      <Filter>core\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\algorithm.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\color.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\core.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\data_stream.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\geometry.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\image_process.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\interface.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\mat.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\structure.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\tools.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\vector.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="core\array.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\operator.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\element.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\dlladmin.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\dllapi.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\convert.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\pointer.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\csv.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\elemmatrix.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="net\activation.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\batchnormalization.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\convolution.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\costfunction.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\dropout.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\fullconnection.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\layer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\net.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\nnapi.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\optimalize.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\pool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\prelu.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\reshape.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\softmax.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\train.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\traindata.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="core\image.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\autoresetevent.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\base64.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\BaseCamera.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\LocalCamera.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="core\runnable.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\threadpool.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\thread.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\mutex.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+    <ClCompile Include="core\timer.cpp">
+      <Filter>core\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+</Project>
