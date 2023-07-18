@@ -67,20 +67,35 @@ std::string lzh::Color::css() const noexcept
 
 int32 lzh::Color::rgb() const noexcept
 {
-	return int32();
+    return int32(red()<<16|green()<<8|blue());
 }
 
-void lzh::Color::setRgb(int32 code) const noexcept
+void lzh::Color::setRgb(int32 code) noexcept
 {
+    int8 r = (code >> 16) & 0xFF;
+    int8 g = (code >> 8) & 0xFF;
+    int8 b = code & 0xFF;
+    data[0] = r;
+    data[1] = g;
+    data[2] = b;
+    data[3] = 0xFF;
 }
 
 int32 lzh::Color::rgba() const noexcept
 {
-	return int32();
+    return int32(red()<<16|green()<<8|blue()|alpha()<<24);
 }
 
-void lzh::Color::setRgba(int32 code) const noexcept
+void lzh::Color::setRgba(int32 code) noexcept
 {
+    int8 r = (code >> 16) & 0xFF;
+    int8 g = (code >> 8) & 0xFF;
+    int8 b = code & 0xFF;
+    int8 a = (code >> 24) & 0xFF;
+    data[0] = r;
+    data[1] = g;
+    data[2] = b;
+    data[3] = a;
 }
 
 uint8 lzh::Color::red() const

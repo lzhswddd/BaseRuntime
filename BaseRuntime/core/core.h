@@ -27,6 +27,33 @@
 #endif // DEBUG
 #endif
 
+#define LZH_DISABLE_COPY(Class) \
+    Class(const Class &) = delete;\
+    Class &operator=(const Class &) = delete;
+
+#define LZH_DISABLE_COPY_MOVE(Class) \
+    LZH_DISABLE_COPY(Class) \
+    Class(Class &&) = delete; \
+    Class &operator=(Class &&) = delete;
+
+template <typename T> static inline T *GetPtrHelper(T *ptr) noexcept { return ptr; }
+template <typename _Tp> static inline auto GetPtrHelper(const _Tp &p) noexcept -> decltype(p.data()){ return p.data(); }
+
+#define LZH_DECLARE_PRIVATE(Class) \
+    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(GetPtrHelper(d_ptr)); } \
+    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(GetPtrHelper(d_ptr)); } \
+    friend class Class##Private;\
+    ScopedPointer<Class##Private> d_ptr;
+
+#define LZH_DECLARE_PUBLIC(Class) \
+    inline Class* q_func() { return reinterpret_cast<Class *>(GetPtrHelper(q_ptr)); } \
+    inline const Class* q_func() const { return reinterpret_cast<const Class *>(GetPtrHelper(q_ptr)); } \
+    friend class Class;\
+    Class *q_ptr;
+
+#define LZH_D(Class) Class##Private * const d = d_func()
+#define LZH_Q(Class) Class * const q = q_func()
+
 #ifndef LENGTH
 #define LENGTH(x) (sizeof(x)/sizeof(lzh::mat_t))
 #endif
@@ -88,6 +115,7 @@ extern LZHAPI void print(int colorCode, const char *info, ...);
 #define THROW_STR "Exception thrown in function %s, in %s line, @Exception Information:"
 #define THROW_STRING(str) (std::string("ERROR: Exception thrown (In function ") + __FUNCTION__ + "), in " + STR2(__LINE__) + "line, @Exception Information:" + str).c_str()
 #define LZH_ACCESS(judge, info) do{judge{_NOP;}else{print(THROW_COLOR, "ERROR: %s, the program does not meet the requirements @Abnormal Position:",STR2(judge));info;}}while(0)
+#define LZH_ASSERT(judge) do{if(judge){_NOP;}else{print(THROW_COLOR, "ERROR: %s, the program does not meet the requirements @Abnormal Position:",STR2(if(judge)));}}while(0)
 #endif
 #define THROW_LOG print(THROW_COLOR, THROW_STR, __FUNCTION__, STR2(__LINE__))
 #define THROW_LOG_END fprintf(stderr, "\n")
@@ -106,7 +134,9 @@ extern LZHAPI void print(int colorCode, const char *info, ...);
 #define THROW_INFO(info) do{throw std::exception(THROW_STRING(lzh::errinfo[(info)]));}while(0)
 #define THROW_INFO_STR(info) do{throw std::exception(THROW_STRING(info));}while(0)
 #define THROW_TYPE_INFO(should_type, actually_type) THROW_INFO_STR((std::string("need type is ")+(should_type)+", but getting actually type is "+(actually_type)).c_str())
-#define LZH_ACCESS(judge, info) do{judge{_NOP;}else{info;}}while(0)
+#define LZH_ACCESS(judge, info) do{judge{_NOP;}else{print(THROW_COLOR, "错误: %s, 程序不符合要求 @位置: ",STR2(judge));info;}}while(0)
+#define LZH_ASSERT(judge) do{if(judge){_NOP;}else{print(THROW_COLOR, "错误: %s, 程序不符合要求\n",STR2(if(judge)));}}while(0)
+
 #endif
 
 #define CHECK_MATRIX(m_) LZH_ACCESS(if((m_) != nullptr), THROW_INFO(ERR_INFO_EMPTY))
@@ -448,7 +478,7 @@ namespace lzh
 	public:
 		typedef _Tp value_type;
 		enum { type = NONE };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 
 	template<> class DataType<int8>
@@ -456,77 +486,77 @@ namespace lzh
 	public:
 		typedef int8 value_type;
 		enum { type = TP_8S };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<uint8>
 	{
 	public:
 		typedef uint8 value_type;
 		enum { type = TP_8U };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<int16>
 	{
 	public:
 		typedef int32 value_type;
 		enum { type = TP_16S };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<uint16>
 	{
 	public:
 		typedef int32 value_type;
 		enum { type = TP_16U };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<int32>
 	{
 	public:
 		typedef int32 value_type;
 		enum { type = TP_32S };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<uint32>
 	{
 	public:
 		typedef int32 value_type;
 		enum { type = TP_32U };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<float32>
 	{
 	public:
 		typedef float32 value_type;
 		enum { type = TP_32F };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<float64>
 	{
 	public:
 		typedef float64 value_type;
 		enum { type = TP_64F };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<float128>
 	{
 	public:
 		typedef float128 value_type;
 		enum { type = TP_64D };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<int64>
 	{
 	public:
 		typedef float64 value_type;
 		enum { type = TP_64S };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 	template<> class DataType<uint64>
 	{
 	public:
 		typedef float128 value_type;
 		enum { type = TP_64U };
-		const int8 * type_name = TypeString[type];
+        const int8 * type_name = TypeString[type];
 	};
 //	template<> class DataType<msize>
 //	{
@@ -546,7 +576,7 @@ namespace lzh
 	public:
 		Handle();
 		Handle(void* p);
-		~Handle();
+        virtual ~Handle();
 
 		operator void* ();
 		operator const void* ()const;
@@ -656,7 +686,7 @@ namespace lzh
 	public:
 		typedef Val_ value_type;
 		enum { type = MAT_T };
-		const int8 * type_name = "Val_";
+        const std::string type_name = "Val_";
 	};
 	class LZHAPI Val : public Val_
 	{
@@ -682,12 +712,12 @@ namespace lzh
 	public:
 		typedef Val value_type;
 		enum { type = MAT_T };
-		const int8 * type_name = "Val";
+        const std::string type_name = "Val";
 	}; 
 	template<class _Tp> class TEMPLATE_API Range_
 	{
 	public:
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 		class Range_Iterator
 		{
 		public:
@@ -721,8 +751,8 @@ namespace lzh
 			_Tp gap;
 		};
 
-		using iterator = typename Range_Iterator;
-		using const_iterator = typename const Range_Iterator;
+        using iterator = Range_Iterator;
+        using const_iterator = const Range_Iterator;
 
 		explicit Range_() : v1(0), v2(0) {}
 		Range_(const _Tp& v, bool equal = false) : v1(0), v2(v), gap_(1) { if (equal) v2 += gap_; }
@@ -741,17 +771,17 @@ namespace lzh
 		}
 		_Tp v1; _Tp v2; _Tp gap_;
 	};
-	using RangeB = typename Range_<int8>;
-	using Range = typename Range_<int32>;
-	using RangeM = typename Range_<msize>;
-	using RangeF = typename Range_<float32>;
-	using RangeD = typename Range_<float64>;
+    using RangeB = Range_<int8>;
+    using Range = Range_<int32>;
+    using RangeM = Range_<msize>;
+    using RangeF = Range_<float32>;
+    using RangeD = Range_<float64>;
 	template<class _Tp> class Point2_;
 	template<class _Tp, int N> class Vec;
 	template<class _Tp> class TEMPLATE_API Rect_
 	{
 	public:
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 
 		explicit Rect_() : x(0), y(0), width(0), height(0) {}
 		Rect_(const _Tp x, const _Tp y, const _Tp width, const _Tp height) : x(x), y(y), width(width), height(height) {}
@@ -775,7 +805,7 @@ namespace lzh
 	template<class _Tp> class TEMPLATE_API Size_
 	{
 	public:
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 
 		explicit Size_() :h(0), w(0) {}
 		Size_(const _Tp width, const _Tp height = 1) :h(height), w(width) {}
@@ -804,10 +834,11 @@ namespace lzh
 	typedef Size_<int32> Size;
 	typedef Size_<float32> Size2f;
 	typedef Size_<float64> Size2d;
+	typedef Size2f SizeF;
 	template<class _Tp> class TEMPLATE_API Size3_
 	{
 	public:
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 
 		explicit Size3_() : h(0), w(0), c(0) {}
 		Size3_(const _Tp w, const _Tp h, const _Tp c = 1) : h(h), w(w), c(c) {}
@@ -869,7 +900,7 @@ namespace lzh
 	template<class _Tp> class TEMPLATE_API MatPtr
 	{
 	public:
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 
 		explicit MatPtr();
 		MatPtr(const int32 size);
@@ -911,26 +942,131 @@ namespace lzh
 		int32 *refcount = 0;
 	};
 
+    template <typename T>
+    struct ScopedPointerDeleter
+    {
+        static inline void cleanup(T *pointer)
+        {
+            typedef char IsIncompleteType[ sizeof(T) ? 1 : -1 ];
+            (void) sizeof(IsIncompleteType);
+
+            delete pointer;
+        }
+    };
+
+    template <typename T>
+    struct ScopedPointerArrayDeleter
+    {
+        static inline void cleanup(T *pointer)
+        {
+            typedef char IsIncompleteType[ sizeof(T) ? 1 : -1 ];
+            (void) sizeof(IsIncompleteType);
+
+            delete [] pointer;
+        }
+    };
+
+    struct ScopedPointerPodDeleter
+    {
+        static inline void cleanup(void *pointer) { if (pointer) free(pointer); }
+    };
+
+    template <typename T, typename Cleanup = ScopedPointerDeleter<T> >
+    class TEMPLATE_API ScopedPointer
+    {
+        typedef T *ScopedPointer:: *RestrictedBool;
+    public:
+        explicit ScopedPointer(T *p = nullptr) noexcept : d(p)
+        {
+        }
+
+        inline ~ScopedPointer()
+        {
+            T *oldD = this->d;
+            Cleanup::cleanup(oldD);
+        }
+
+        inline T &operator*() const
+        {
+            LZH_ACCESS(if(d!=nullptr), THROW_INFO(ERR_INFO_PTR));
+            return *d;
+        }
+
+        T *operator->() const noexcept
+        {
+            return d;
+        }
+
+        bool operator!() const noexcept
+        {
+            return !d;
+        }
+
+        operator RestrictedBool() const noexcept
+        {
+            return isNull() ? nullptr : &ScopedPointer::d;
+        }
+
+        T *data() const noexcept
+        {
+            return d;
+        }
+
+        bool isNull() const noexcept
+        {
+            return !d;
+        }
+
+        void reset(T *other = nullptr) noexcept(noexcept(Cleanup::cleanup(std::declval<T *>())))
+        {
+            if (d == other)
+                return;
+            T *oldD = d;
+            d = other;
+            Cleanup::cleanup(oldD);
+        }
+
+        T *take() noexcept
+        {
+            T *oldD = d;
+            d = nullptr;
+            return oldD;
+        }
+
+        void swap(ScopedPointer<T, Cleanup> &other) noexcept
+        {
+            std::swap(d, other.d);
+        }
+
+        typedef T *pointer;
+
+    protected:
+        T *d;
+
+    private:
+        LZH_DISABLE_COPY(ScopedPointer)
+    };
+
 	template<> class DataType<Complex>
 	{
 	public:
 		typedef Complex value_type;
 		enum { type = MAT_CREATETYPE(2) + DataType<mat_t>::type };
-		const int8 * type_name = "Complex";
+        const std::string type_name = "Complex";
 	};
 	template<typename _Tp> class DataType<Size_<_Tp>>
 	{
 	public:
 		typedef Size_<_Tp> value_type;
 		enum { type = MAT_CREATETYPE(2) + DataType<_Tp>::type };
-		const int8 * type_name = ("Size<" + std::string(DataType<_Tp>().type_name) + ">").c_str();
+        const std::string type_name = ("Size<" + DataType<_Tp>().type_name + ">").c_str();
 	};
 	template<typename _Tp> class DataType<Rect_<_Tp>>
 	{
 	public:
 		typedef Rect_<_Tp> value_type;
 		enum { type = MAT_CREATETYPE(4) + DataType<_Tp>::type };
-		const int8 * type_name = ("Rect<" + std::string(DataType<_Tp>().type_name) + ">").c_str();
+        const std::string type_name = ("Rect<" + DataType<_Tp>().type_name + ">").c_str();
 	};
 
 	/**
@@ -951,9 +1087,9 @@ namespace lzh
 	extern LZHAPI mat_t rem(Val x, Val val);
 	template<typename _Tp> TEMPLATE_API bool isType(int32 type);
 	template<typename _Tp> TEMPLATE_API int32 Round(_Tp x) { return (int32)(x + (_Tp)0.5); }
-	template<>extern LZHAPI int32 Round(float32 x);
-	template<>extern LZHAPI int32 Round(float64 x);
-	template<>extern LZHAPI int32 Round(float128 x);
+    template<> LZHAPI int32 Round(float32 x);
+    template<> LZHAPI int32 Round(float64 x);
+    template<> LZHAPI int32 Round(float128 x);
 	template<typename _Tp> TEMPLATE_API int32 Floor(_Tp x);	
 }
 

@@ -77,9 +77,9 @@ namespace lzh {
 		public:
 			explicit Method();
 			Method(mat_t step);
-			void init(vector<Size3>& size) {}
-			void save(string file)const {}
-			void load(string file) {}
+            void init(vector<Size3>& ) {}
+            void save(string )const {}
+            void load(string ) {}
 			void Run(vector<Mat> &dlayer, TrainData::iterator x, vector<mat_t> &error);
 			Optimizer* minimize()const;
 			void copyTo(Optimizer* op)const;
@@ -99,9 +99,9 @@ namespace lzh {
 			@param step 学习率
 			*/
 			explicit GradientDescentOptimizer(mat_t step = 1e-2);
-			void init(vector<Size3>& size) {}
-			void save(string file)const {}
-			void load(string file) {}
+            void init(vector<Size3>& ) {}
+            void save(string )const {}
+            void load(string ) {}
 			void Run(vector<Mat> &dlayer, TrainData::iterator x, vector<mat_t> &error);
 			/**
 			@brief 配置模型函数，返回注册的优化器Optimizer

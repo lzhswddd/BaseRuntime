@@ -20,7 +20,7 @@ void nn::dropout::forword(const Mat & in, Mat &out) const
 {
 	out = in;
 }
-void nn::dropout::forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> & variable)
+void nn::dropout::forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> & )
 {
 	for (size_t idx = 0; idx < in.size(); ++idx) {
 		Mat drop; 
@@ -29,7 +29,7 @@ void nn::dropout::forword_train(const vector<Mat> & in, vector<Mat> & out, vecto
 		out[idx] *= 1.0f / (1 - dropout_probability);
 	}
 }
-void nn::dropout::back(const vector<Mat> & in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const
+void nn::dropout::back(const vector<Mat> & in, vector<Mat> & out, vector<Mat> *, int *)const
 {
 	out = in;
 }
@@ -37,7 +37,7 @@ Size3 nn::dropout::initialize(Size3 param_size)
 {
 	return param_size;
 }
-void nn::dropout::save(json * jarray, FILE * file) const
+void nn::dropout::save(json * jarray, FILE * ) const
 {
 	json info;
 	info["type"] = Layer::Type2String(type);
@@ -46,7 +46,7 @@ void nn::dropout::save(json * jarray, FILE * file) const
 	info["dropout"] = dropout_probability;
 	jarray->push_back(info);
 }
-void nn::dropout::load(json & info, FILE * file)
+void nn::dropout::load(json & info, FILE * )
 {
 	type = Layer::String2Type(info["type"]);
 	layer_index = info["layer"];

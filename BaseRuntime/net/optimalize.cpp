@@ -31,7 +31,7 @@ OptimizerMethod Optimizer::OpMethod() const
 */
 Method::Method() :Optimizer() {}
 Method::Method(mat_t step) : Optimizer(step) {}
-void Method::Run(vector<Mat> &dlayer, TrainData::iterator x, vector<mat_t> &error) {}
+void Method::Run(vector<Mat> &, TrainData::iterator , vector<mat_t> &) {}
 Optimizer* Method::minimize()const
 {
 	Optimizer* train = new Method(*this);

@@ -53,7 +53,7 @@ void nn::pool::forword_train(const vector<Mat> &in, vector<Mat> & out, vector<Ma
 	}
 	variable = out;
 }
-void nn::pool::back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const
+void nn::pool::back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *, int *)const
 {
 	for (size_t idx = 0; idx < in.size(); ++idx)
 		out[idx] = upsample(in[idx], idx);
@@ -62,7 +62,7 @@ Size3 nn::pool::initialize(Size3 input_size)
 {
 	return CalSize(input_size, Size(ksize.h, ksize.w), Point(0, 0), Size(strides, strides));;
 }
-void nn::pool::save(json * jarray, FILE * file) const
+void nn::pool::save(json * jarray, FILE * ) const
 {
 	json info;
 	info["type"] = Layer::Type2String(type);
@@ -74,7 +74,7 @@ void nn::pool::save(json * jarray, FILE * file) const
 	info["size"]["width"] = ksize.w;
 	jarray->push_back(info);
 }
-void nn::pool::load(json & info, FILE * file)
+void nn::pool::load(json & info, FILE * )
 {
 	pool_type = pool::String2Pooltype(info["pool_type"]);
 	strides = info["strides"];

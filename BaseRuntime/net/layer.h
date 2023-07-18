@@ -79,12 +79,12 @@ namespace lzh {
 				isparam = false;
 			}
 			void forword(const Mat &in, Mat &out)const { out = in; }
-			void forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> &variable) { out = in; }
-			void back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const { out = in; }
+            void forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> &) { out = in; }
+            void back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *, int *)const { out = in; }
 			Size3 initialize(Size3 size) { return size; }
-			void save(json * jarray, FILE* file)const {}
-			void load(json & info, FILE* file) {}
-			void show(std::ostream &out)const {}
+            void save(json * , FILE* )const {}
+            void load(json & , FILE* ) {}
+            void show(std::ostream &)const {}
 		};
 
 		class LZHAPI Activate :

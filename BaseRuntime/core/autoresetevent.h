@@ -4,7 +4,7 @@
 
 #include "core.h"
 #include "pointer.h"
-
+#include "threadlock.h"
 
 namespace lzh
 {
@@ -17,8 +17,8 @@ namespace lzh
 	};
 	template<> struct TEMPLATE_API PointerInterFace<AutoResetEventHandle>
 	{
-		using value_type = typename AutoResetEventHandle;
-		static bool Custom() { return true; }
+        using value_type = AutoResetEventHandle;
+        static bool Custom() { return true; }
 		static AutoResetEventHandle* Create(bool bManualReset) { AutoResetEventHandle* handle = new AutoResetEventHandle(); handle->create(bManualReset); return handle; }
 		static void Release(AutoResetEventHandle* ptr) { ptr->release(); }
 	};
@@ -27,11 +27,12 @@ namespace lzh
 	public:
 		AutoResetEvent(bool bManualReset = false);
 		~AutoResetEvent();
-		bool WaitOne(uint32 dwWaitTimeMillSeconds);
+        bool WaitOne(uint32 dwWaitTimeMillSeconds = -1);
+        bool Wait(std::mutex * mutex, uint32 dwWaitTimeMillSeconds = -1);
 		bool Set();
-		bool Reset();
+        bool Reset();
 
-	private:
+    private:
 		Pointer<AutoResetEventHandle> m_waitEvent;
 	};
 }

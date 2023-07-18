@@ -16,8 +16,8 @@ namespace lzh {
 			void back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const override;
 			Mat f(const Mat & x)const override;
 			Mat df(const Mat & x)const override;
-			virtual void f(mat_t *p, const mat_t *mat, const mat_t *ai)const {}
-			virtual void df(mat_t *p, const mat_t *mat, const mat_t *ai)const {}
+            virtual void f(mat_t *, const mat_t *, const mat_t *)const override{}
+            virtual void df(mat_t *, const mat_t *, const mat_t *)const override{}
 		};
 	}
 }

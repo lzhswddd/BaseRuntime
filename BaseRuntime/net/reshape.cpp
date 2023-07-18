@@ -29,7 +29,7 @@ void nn::reshape::forword_train(const vector<Mat> & in, vector<Mat> & out, vecto
 		out[idx].reshape(size);
 	variable = out;
 }
-void nn::reshape::back(const vector<Mat> & in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const
+void nn::reshape::back(const vector<Mat> & in, vector<Mat> & out, vector<Mat> *, int *)const
 {
 	out = in;
 	for (size_t idx = 0; idx < in.size(); ++idx)
@@ -43,7 +43,7 @@ Size3 nn::reshape::initialize(Size3 param_size)
 	}
 	return size;
 }
-void nn::reshape::save(json * jarray, FILE * file) const
+void nn::reshape::save(json * jarray, FILE * ) const
 {
 	json info;
 	info["type"] = Layer::Type2String(type);
@@ -54,7 +54,7 @@ void nn::reshape::save(json * jarray, FILE * file) const
 	info["size"]["c"] = size.c;
 	jarray->push_back(info);
 }
-void nn::reshape::load(json & info, FILE * file)
+void nn::reshape::load(json & info, FILE * )
 {
 	type = Layer::String2Type(info["type"]);
 	layer_index = info["layer"];

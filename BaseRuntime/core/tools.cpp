@@ -2,37 +2,12 @@
 #include "tools.h"
 #include <iostream>
 #include <fstream>
-#include <sstream >
+#include "mult_thread.h"
 using namespace lzh;
 
 /****************************************************************************
 其他工具
 *****************************************************************************/
-std::string lzh::TimeData::toString()const
-{
-	std::stringstream out;
-	out << year << "/"
-		<< month << "/"
-		<< day << " "
-		<< h << ":"
-		<< m << ": "
-		<< s << "."
-		<< ms << "s";
-	return out.str();
-}
-
-std::string lzh::TimeData::toTime() const
-{
-	std::stringstream out;
-	out << 1900 + year << "/"
-		<< 1 + month << "/"
-		<< day << " "
-		<< h << ":"
-		<< m << ":"
-		<< s;
-	return out.str();
-}
-
 std::string lzh::getFileName(std::string filename)
 {
 	auto idx = filename.rfind('\\');
@@ -942,112 +917,9 @@ std::string lzh::Type2String(int32 type)
 	}
 }
 
-
-/****************************************************************************
-计时器
-*****************************************************************************/
-#include <ctime>
-LZHAPI TimeData lzh::NowTime()
-{
-	time_t now = time(0);
-	tm* ltm = localtime(&now);
-	TimeData timeData;
-	timeData.year =  ltm->tm_year;
-	timeData.month = ltm->tm_mon;
-	timeData.day = ltm->tm_mday;
-	timeData.h = ltm->tm_hour;
-	timeData.m = ltm->tm_min;
-	timeData.s = ltm->tm_sec;
-	return timeData;
-}
-#if defined(__linux__)
-#include <sys/time.h>
-#include <unistd.h>
-Timer::Timer()
-{
-	start = (struct timeval*)malloc(sizeof(struct timeval));
-	end = (struct timeval*)malloc(sizeof(struct timeval));
-}
-Timer::~Timer()
-{
-	FREE_PTR(start);
-	FREE_PTR(end);
-}
-void Timer::Start()
-{
-	gettimeofday((struct timeval*)start, NULL);
-}
-mat_t Timer::End()
-{
-	gettimeofday((struct timeval*)end, NULL);
-	return uint64(((struct timeval*)end->tv_sec - (struct timeval*)start->tv_sec) * 1000.0 + (struct timeval*)end->tv_usec - (struct timeval*)start->tv_usec);
-}
-TimeData lzh::Timer::EndTime()
-{
-	return TimeData(End());
-}
-static struct timeval t1, t2;
-void lzh::StartCounter()
-{
-	gettimeofday(&t1, NULL);
-}
-mat_t lzh::EndCounter()
-{
-	gettimeofday(&t2, NULL);
-	return _T((t2.tv_sec - t1.tv_sec) * 1000.0 + t2.tv_usec - t1.tv_usec);
-}
-void lzh::Wait(uint ms)
-{
-	sleep(ms);
-}
-#elif defined(_WIN32)
-#include <windows.h>  
+#include <windows.h>
 #include <io.h>
 #include <direct.h>
-Timer::Timer()
-{
-	start = new LARGE_INTEGER();
-	end = new LARGE_INTEGER();
-	fc = new LARGE_INTEGER();
-	QueryPerformanceFrequency((LARGE_INTEGER*)fc);
-}
-Timer::~Timer()
-{
-	FREE_PTR(start);
-	FREE_PTR(end);
-	FREE_PTR(fc);
-}
-void Timer::Start()
-{
-	QueryPerformanceCounter((LARGE_INTEGER*)start);
-}
-uint64 Timer::End()
-{
-	QueryPerformanceCounter((LARGE_INTEGER*)end);
-	return lzh::saturate_cast<uint64>(((((LARGE_INTEGER*)end)->QuadPart - ((LARGE_INTEGER*)start)->QuadPart) * 1000000.0) / ((LARGE_INTEGER*)fc)->QuadPart);
-}
-TimeData Timer::EndTime()
-{
-	return TimeData(End());
-}
-static LARGE_INTEGER cpuFreq;
-static LARGE_INTEGER startTime;
-static LARGE_INTEGER endTime;
-
-void lzh::Frequency()
-{
-	if (cpuFreq.QuadPart == 0)
-		QueryPerformanceFrequency(&cpuFreq);
-}
-void lzh::StartCounter()
-{
-	QueryPerformanceCounter(&startTime);
-}
-mat_t lzh::EndCounter()
-{
-	QueryPerformanceCounter(&endTime);
-	return _T(((endTime.QuadPart - startTime.QuadPart) * 1000.0) / cpuFreq.QuadPart);
-}
 /**
 @brief getFiles 得到路径下所有文件的路径
 @param path 文件夹路径
@@ -1112,11 +984,34 @@ bool lzh::removeFile(std::string path)
 
 bool lzh::createDirectory(std::string path)
 {
-	if (GetFileAttributesA(path.c_str()) != FILE_ATTRIBUTE_DIRECTORY) {
-		bool flag = CreateDirectory(path.c_str(), NULL);
+    if (GetFileAttributesA(path.c_str()) != FILE_ATTRIBUTE_DIRECTORY) {
+#ifdef UNICODE
+        bool flag = CreateDirectory(STR2WSTR(path.c_str()), NULL);
+#else
+        bool flag = CreateDirectory(path.c_str(), NULL);
+#endif // !UNICODE
 		return flag;
 	}
 	else return true;
+}
+void lzh::deleteDirectoryFiles(std::string path, uint32 threadNum)
+{
+	if (isExists(path)) {
+		StringList files = getFiles(path);
+		if (!files.empty()) {
+            MultThread<std::string> RemoveFile(threadNum);
+			RemoveFile.Process = [](const std::string& path) {
+				try {
+					removeFile(path);
+				}
+				catch (std::exception ex) { std::cerr << __FUNCTION__ << ": " << ex.what(); }};
+			for (auto val : files) {
+				RemoveFile.Append(val);
+			}
+			RemoveFile.Start();
+			RemoveFile.WaitExit();
+		}
+	}
 }
 std::string lzh::appendPath(const std::initializer_list<std::string>& path)
 {
@@ -1146,7 +1041,11 @@ bool lzh::isExists(std::string path)
 {
 	WIN32_FIND_DATA FindFileData;
 	HANDLE hFind;
-	hFind = FindFirstFile(path.c_str(), &FindFileData);
+#ifdef UNICODE
+    hFind = FindFirstFile(STR2WSTR(path.c_str()), &FindFileData);
+#else
+    hFind = FindFirstFile(path.c_str(), &FindFileData);
+#endif // !UNICODE
 	if (hFind == INVALID_HANDLE_VALUE) {
 		return false;
 	}
@@ -1195,7 +1094,11 @@ void lzh::Command(const char * cmd)
 	si.wShowWindow = SW_SHOWNORMAL;
 	si.dwFlags = STARTF_USESHOWWINDOW;
 	//关键步骤，CreateProcess函数参数意义请查阅MSDN   
-	if (CreateProcess(NULL, (char*)cmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+#ifdef UNICODE
+    if (CreateProcess(NULL, (wchar_t*)STR2WSTR(cmd), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+#else
+    if (CreateProcess(NULL, (char*)cmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+#endif // !UNICODE
 	{
 		ResumeThread(pi.hThread); //唤醒线程
 		WaitForSingleObject(pi.hProcess, INFINITE);//等待进程结束，时间：无限
@@ -1298,4 +1201,3 @@ std::string lzh::StringToUTF8(const std::string & str)
 
 	return retStr;
 }
-#endif

@@ -5,59 +5,10 @@
 #include "geometry.h"
 #include "image_process.h"
 #include "operator.h"
-
-#define MEASURE_TIME(function) do{\
-		lzh::Timer _timer_;\
-		_timer_.Start();\
-		function;\
-		print(0x0002, "running function %s -> cast time is %0.4f sec\n", STR2(function), _timer_.End() / 1000000.0);\
-		}while(0)
-
+#include "timer.h"
+#define STR2WSTR(str) lzh::Str2WStr(str).c_str()
 namespace lzh
 {
-	class LZHAPI TimeData
-	{
-	public:
-		TimeData(){
-			memset(this, 0, sizeof(TimeData));
-		}
-		TimeData(uint64 t) : t(t) {
-			us = uint32((t * 1000) % 1000);
-			ms = uint32((t) % 1000);
-			s = uint32((t / 1000) % 60);
-			m = uint32((t / 1000) / 60 % 60);
-			h = uint32((t / 1000) / 3600 % 60);
-			day = uint32((t / 1000) / (3600 * 24) % 31);
-			month = 0;
-			year = 0;
-		}
-		uint32 year;
-		uint32 month;
-		uint32 day;
-		uint32 h;
-		uint32 m;
-		uint32 s;
-		uint32 ms;
-		uint32 us;
-		uint64 t;
-
-		std::string toString()const;
-		std::string toTime()const;
-	};
-	extern LZHAPI TimeData NowTime();
-	class LZHAPI Timer
-	{
-	public:
-		Timer();
-		~Timer();
-		void Start();
-		uint64 End();
-		TimeData EndTime();
-	protected:
-		void* start;
-		void* end;
-		void* fc;
-	};
 	using StringList = typename std::vector<std::string>;
 	/**
 	√¸¡Ó–– ‰≥ˆ
@@ -105,10 +56,6 @@ namespace lzh
 	extern LZHAPI int32 console(const std::string &str);
 	extern LZHAPI mat_t saveDiv(mat_t div, mat_t v, mat_t def = (std::numeric_limits<mat_t>::max)());
 	extern LZHAPI void binaryPrint(int32 value, int32 space = 0);
-	extern LZHAPI void Wait(uint32 ms);
-	extern LZHAPI void Frequency();
-	extern LZHAPI void StartCounter();
-	extern LZHAPI mat_t EndCounter();
 
 	extern LZHAPI void Command(const char* cmd);
 	extern LZHAPI char* WideCharToANSI(const wchar_t* szWidechar);
@@ -174,6 +121,7 @@ namespace lzh
 	extern LZHAPI size_t getFileSize(std::ifstream & file);
 	extern LZHAPI bool removeFile(std::string path);
 	extern LZHAPI bool createDirectory(std::string path);
+    extern LZHAPI void deleteDirectoryFiles(std::string path, uint32 threadNum = 8);
 	extern LZHAPI std::string appendPath(const std::initializer_list<std::string> & path);
 
 	extern LZHAPI std::string Enum2String(PrintType type);

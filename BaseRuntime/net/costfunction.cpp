@@ -48,11 +48,11 @@ void nn::costfunction::forword(const Mat & in, Mat &out) const
 {
 	out = in;
 }
-void nn::costfunction::forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> & variable)
+void nn::costfunction::forword_train(const vector<Mat> & in, vector<Mat> & out, vector<Mat> & )
 {
 	out = in;
 }
-void nn::costfunction::back(const vector<Mat> & in, vector<Mat> & out, vector<Mat> *dlayer, int *number) const
+void nn::costfunction::back(const vector<Mat> & in, vector<Mat> & out, vector<Mat> *, int *) const
 {
 	out = in;
 }
@@ -90,10 +90,10 @@ Size3 nn::costfunction::initialize(Size3 param_size)
 {
 	return param_size;
 }
-void nn::costfunction::save(json * jarray, FILE * file) const
+void nn::costfunction::save(json * , FILE * ) const
 {
 }
-void nn::costfunction::load(json & info, FILE * file)
+void nn::costfunction::load(json & , FILE * )
 {
 }
 void nn::costfunction::show(std::ostream &out) const

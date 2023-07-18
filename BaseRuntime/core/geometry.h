@@ -6,21 +6,21 @@
 
 namespace lzh
 {
-	//class LZHAPI Line :public Vec2m
-	//{
-	//public:
-	//	explicit Line();
-	//	Line(IMat a);
-	//	Line(const Vec2m& v);
-	//	Line(Val_ a, Val_ b);
-	//	Line(std::initializer_list<mat_t> list);
-	//	Line(Point2m p0, Point2m p1);
-	//	Val_ a()const;
-	//	Val_ b()const;
-	//	Vec2m operator ()(Val_ x)const;
-	//	Mat operator ()(Mat X)const;
-	//	static Vec2m fit(IMat x, IMat y, Mat* r = nullptr);
-	//};
+	class LZHAPI Line :public Vec2m
+	{
+	public:
+		explicit Line();
+		Line(IMat a);
+		Line(const Vec2m& v);
+		Line(Val_ a, Val_ b);
+		Line(std::initializer_list<mat_t> list);
+		Line(Point2m p0, Point2m p1);
+		Val_ a()const;
+		Val_ b()const;
+		Vec2m operator ()(Val_ x)const;
+		Mat operator ()(Mat X)const;
+		static Vec2m fit(IMat x, IMat y, Mat* r = nullptr);
+	};
 	class LZHAPI Ellipse : public Vec4m
 	{
 	public:
@@ -69,7 +69,7 @@ namespace lzh
 		Vec3m center()const;
 		Vec3m operator ()(Val_ theta, Val_ fai)const;
 		Mat operator ()(Mat theta_fai)const;
-		static Vec<mat_t, 6> fit(IMat x, IMat y, Mat* r = nullptr);
+		//static Vec<mat_t, 6> fit(IMat x, IMat y, Mat* r = nullptr);
 	};
 	class LZHAPI Sphere : public Ellipsoid
 	{
@@ -80,7 +80,7 @@ namespace lzh
 		Sphere(Val_ x0, Val_ y0, Val_ z0, Val_ radius = 1) : Ellipsoid(x0, y0, z0, radius, radius, radius) {}
 		Sphere(std::initializer_list<mat_t> list) :Ellipsoid(list) {}
 		template<typename _Tp> Sphere(Point3_<_Tp> center, Val_ radius = 1) : Vec3m(center, radius, radius, radius) {}
-		static Vec<mat_t, 4> fit(IMat x, IMat y, Mat* r = nullptr);
+		//static Vec<mat_t, 4> fit(IMat x, IMat y, Mat* r = nullptr);
 	};
 	class LZHAPI Polynomial
 	{

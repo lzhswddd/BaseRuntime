@@ -5,44 +5,44 @@
 #include "algorithm.h"
 
 using namespace lzh;
-//
-//lzh::Line::Line() : Vec2m() {}
-//lzh::Line::Line(IMat a) : Vec2m(toVec<mat_t, 2>(a)) {}
-//lzh::Line::Line(const Vec2m& v) : Vec2m(v) {}
-//lzh::Line::Line(Val_ a, Val_ b) : Vec2m(a, b) {}
-//lzh::Line::Line(std::initializer_list<mat_t> list) : Vec2m() {
-//	int32 size = int32(list.end() - list.begin());
-//	LZH_ACCESS(if (size == 2), THROW_INFO_STR("椭圆只需要中心点坐标和半径, 3-4个参数!"));
-//	memcpy(data, list.begin(), M_SIZE * size);
-//}
-//lzh::Line::Line(Point2m p0, Point2m p1) : Vec2m()
-//{
-//	LZH_ACCESS(if (!isEqual(p0.x, p1.y)), THROW_INFO_STR("该类不支持描述x=b的直线!"));
-//	data[0] = (p0.y - p1.y) / (p0.x - p1.x);
-//	data[1] = p0.y - data[0] * p0.x;
-//}
-//Val_ lzh::Line::a() const
-//{
-//	return data[0];
-//}
-//Val_ lzh::Line::b() const
-//{
-//	return data[1];
-//}
-//Vec2m lzh::Line::operator()(Val_ x) const
-//{
-//	return data[0] * x + data[1];
-//}
-//Mat lzh::Line::operator()(Mat X) const
-//{
-//	return data[0] * X + data[1];
-//}
-//Vec2m lzh::Line::fit(IMat x, IMat y, Mat* r)
-//{
-//	Mat a;
-//	polyfit(x, y, 1, a, r);
-//	return toVec<mat_t, 2>(a);
-//}
+
+lzh::Line::Line() : Vec2m() {}
+lzh::Line::Line(IMat a) : Vec2m(toVec<mat_t, 2>(a)) {}
+lzh::Line::Line(const Vec2m& v) : Vec2m(v) {}
+lzh::Line::Line(Val_ a, Val_ b) : Vec2m(a, b) {}
+lzh::Line::Line(std::initializer_list<mat_t> list) : Vec2m() {
+	int32 size = int32(list.end() - list.begin());
+	LZH_ACCESS(if (size == 2), THROW_INFO_STR("直线只接受2个参数!"));
+	memcpy(data, list.begin(), M_SIZE * size);
+}
+lzh::Line::Line(Point2m p0, Point2m p1) : Vec2m()
+{
+	LZH_ACCESS(if (!isEqual(p0.x, p1.y)), THROW_INFO_STR("该类不支持描述x=b的直线!"));
+	data[0] = (p0.y - p1.y) / (p0.x - p1.x);
+	data[1] = p0.y - data[0] * p0.x;
+}
+Val_ lzh::Line::a() const
+{
+	return data[0];
+}
+Val_ lzh::Line::b() const
+{
+	return data[1];
+}
+Vec2m lzh::Line::operator()(Val_ x) const
+{
+	return data[0] * x + data[1];
+}
+Mat lzh::Line::operator()(Mat X) const
+{
+	return data[0] * X + data[1];
+}
+Vec2m lzh::Line::fit(IMat x, IMat y, Mat* r)
+{
+	Mat a;
+	polyfit(x, y, 1, a, r);
+	return toVec<mat_t, 2>(a);
+}
 
 
 Ellipse::Ellipse() : Vec4m() {}
@@ -175,15 +175,15 @@ Mat lzh::Ellipsoid::operator()(Mat theta_fai) const
 	(data[2] + data[5] * fai.cos()).setTo(res.channel(2).toArray());
 	return res;
 }
-Vec<mat_t, 6> lzh::Ellipsoid::fit(IMat x, IMat y, Mat * r)
-{
-	return Vec<mat_t, 6>();
-}
+//Vec<mat_t, 6> lzh::Ellipsoid::fit(IMat x, IMat y, Mat * r)
+//{
+//	return Vec<mat_t, 6>();
+//}
 
-Vec<mat_t, 4> lzh::Sphere::fit(IMat x, IMat y, Mat * r)
-{
-	return Vec<mat_t, 4>();
-}
+//Vec<mat_t, 4> lzh::Sphere::fit(IMat x, IMat y, Mat * r)
+//{
+//	return Vec<mat_t, 4>();
+//}
 
 Polynomial::Polynomial() : param() {}
 Polynomial::Polynomial(IMat a) : param(a) {}

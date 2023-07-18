@@ -30,7 +30,12 @@ FunctionApi::FunctionApi(const std::vector<const void *> & fun, const std::vecto
 	if (fun.size() != port.size())return;
 	for (size_t i = 0; i < fun.size(); i++) {
 		set(port[i], fun[i]);
-	}
+    }
+}
+
+FunctionApi::~FunctionApi()
+{
+    func.clear();
 }
 
 const void * FunctionApi::f(keyType key) const

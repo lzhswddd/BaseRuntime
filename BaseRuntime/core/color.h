@@ -195,9 +195,9 @@ namespace lzh
 		void setCSS(std::string code);
 
 		int32 rgb()const noexcept;
-		void setRgb(int32 code)const noexcept;
+        void setRgb(int32 code) noexcept;
 		int32 rgba()const noexcept;
-		void setRgba(int32 code)const noexcept;
+        void setRgba(int32 code) noexcept;
 
 		uint8 red()const;
 		uint8 green()const;

@@ -25,7 +25,7 @@ namespace lzh
 
 	template<typename _Tp> struct TEMPLATE_API PointerInterFace
 	{
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 		static bool Custom() { return false; }
 		static _Tp* Create() { return new _Tp(); }
 		template<typename ...Args> static _Tp* Create(const Args & ... argv) { return new _Tp(argv...); }
@@ -46,6 +46,7 @@ namespace lzh
 		~Pointer();
 
 		bool empty()const;
+        bool isNull()const;
 
 		void over(const _Tp &val);
 		void create()noexcept;
@@ -104,7 +105,10 @@ namespace lzh
 	template<typename _Tp> inline Pointer<_Tp>::~Pointer() { release(); }
 	template<typename _Tp> inline bool Pointer<_Tp>::empty() const {
 		return data == nullptr;
-	}
+    }
+    template<typename _Tp> inline bool Pointer<_Tp>::isNull() const {
+        return empty();
+    }
 	template<typename _Tp> inline void Pointer<_Tp>::over(const _Tp &val) {
 		if (data)*data = val;
 	}
@@ -169,8 +173,8 @@ namespace lzh
 	template<typename _Tp> class TEMPLATE_API PtrArray : public RefCountPointer
 	{
 	public:
-		using iterator = typename _Tp*;
-		using const_iterator = typename const _Tp*;
+        using iterator = _Tp*;
+        using const_iterator = const _Tp*;
 		PtrArray() : RefCountPointer(), arr(nullptr), len(0) { }
 		PtrArray(size_t size) : RefCountPointer() { create(size); }
 		PtrArray(const PtrArray &parr) : RefCountPointer() { *this = parr; }

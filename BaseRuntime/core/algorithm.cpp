@@ -838,7 +838,7 @@ void lzh::NumericGradient(InputArray x_, Fun f, OutputArray grad, Val epsilon)
 void lzh::NumericGradient(InputArray a_, InputArray x_, F f, OutputArray grad, Val epsilon)
 {
 	Mat x = x_.getMat();
-	Mat a = x_.getMat();
+    Mat a = a_.getMat();
 #ifdef LZH_DEBUG
 	CHECK_PTR(f);
 	CHECK_MATRIX_(a);
@@ -1114,19 +1114,13 @@ mat_t lzh::randSample(InputArray src)
 }
 Array lzh::mRange(Val low, Val top, Val gap)
 {
-#ifdef LZH_DEBUG
-	if (low >= top)
-		THROW_INFO(ERR_INFO_VALUE);
-#endif //LZH_DEBUG
+	if (low > top)return Array();
 	int32 len = (int32)((top - low) / gap);
 	return low + linspace(0, len - 1, len) * gap;
 }
 Array lzh::linspace(Val low, Val top, int32 len)
 {
-#ifdef LZH_DEBUG
-	if (low >= top)
-		THROW_INFO(ERR_INFO_VALUE);
-#endif //LZH_DEBUG
+	if (low > top)return Array();
 	check(len, len);
 	Array mark(len, MAT_T);
 	mark.at<mat_t>(0) = (mat_t)low;

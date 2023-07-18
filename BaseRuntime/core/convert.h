@@ -22,5 +22,6 @@ namespace lzh
 		static double toDouble(const Value &value);
 		static std::string toString(const Value &value);
 	};
+#define __STR(val) Convert::toString(val)
 }
 #endif // !__CONVERT_H__

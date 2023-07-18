@@ -1,4 +1,4 @@
-ï»¿#define LZH_EXPORTS
+#define LZH_EXPORTS
 #include "core.h"
 #include <time.h>
 //#include <strstream>
@@ -259,7 +259,7 @@ std::string lzh::Value::toString() const
 
 
 /****************************************************************************
-éšæœºæ•°
+Ëæ»úÊı
 *****************************************************************************/
 void lzh::Srandom()
 {

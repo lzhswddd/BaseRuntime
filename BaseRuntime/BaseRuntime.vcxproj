@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera\BaseCamera.h" />
+    <ClInclude Include="camera\CameraSupport.h" />
+    <ClInclude Include="camera\LocalCamera.h" />
+    <ClInclude Include="camera\ReceiveDevice.h" />
     <ClInclude Include="core\action.h" />
     <ClInclude Include="core\algorithm.h" />
     <ClInclude Include="core\algorithm_inl.hpp" />
@@ -26,7 +30,9 @@
     <ClInclude Include="core\array_inl.hpp" />
     <ClInclude Include="core\autoresetevent.h" />
     <ClInclude Include="core\base.h" />
+    <ClInclude Include="core\base64.h" />
     <ClInclude Include="core\color.h" />
+    <ClInclude Include="core\container.h" />
     <ClInclude Include="core\convert.h" />
     <ClInclude Include="core\core.h" />
     <ClInclude Include="core\core_inl.hpp" />
@@ -39,6 +45,7 @@
     <ClInclude Include="core\dllapi.h" />
     <ClInclude Include="core\element.h" />
     <ClInclude Include="core\elemmatrix.h" />
+    <ClInclude Include="core\eventhandler.h" />
     <ClInclude Include="core\geometry.h" />
     <ClInclude Include="core\image.h" />
     <ClInclude Include="core\imageio.h" />
@@ -48,14 +55,21 @@
     <ClInclude Include="core\mat_inl.hpp" />
     <ClInclude Include="core\mult_thread.h" />
     <ClInclude Include="core\mult_thread_inl.hpp" />
+    <ClInclude Include="core\threadlock.h" />
     <ClInclude Include="core\operator.h" />
     <ClInclude Include="core\parse_templates_inl.h" />
     <ClInclude Include="core\point.h" />
     <ClInclude Include="core\pointer.h" />
     <ClInclude Include="core\point_inl.hpp" />
+    <ClInclude Include="core\runnable.h" />
     <ClInclude Include="core\signal.h" />
     <ClInclude Include="core\structure.h" />
     <ClInclude Include="core\structure_inl.hpp" />
+    <ClInclude Include="core\thread.h" />
+    <ClInclude Include="core\threadpool.h" />
+    <ClInclude Include="core\threadpoolprivate.h" />
+    <ClInclude Include="core\threadprivate.h" />
+    <ClInclude Include="core\timer.h" />
     <ClInclude Include="core\tools.h" />
     <ClInclude Include="core\tools_inl.hpp" />
     <ClInclude Include="core\type.h" />
@@ -86,9 +100,12 @@
     <ClInclude Include="net\traindata.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="camera\BaseCamera.cpp" />
+    <ClCompile Include="camera\LocalCamera.cpp" />
     <ClCompile Include="core\algorithm.cpp" />
     <ClCompile Include="core\array.cpp" />
     <ClCompile Include="core\autoresetevent.cpp" />
+    <ClCompile Include="core\base64.cpp" />
     <ClCompile Include="core\color.cpp" />
     <ClCompile Include="core\convert.cpp" />
     <ClCompile Include="core\core.cpp" />
@@ -103,9 +120,14 @@
     <ClCompile Include="core\image_process.cpp" />
     <ClCompile Include="core\interface.cpp" />
     <ClCompile Include="core\mat.cpp" />
+    <ClCompile Include="core\mutex.cpp" />
     <ClCompile Include="core\operator.cpp" />
     <ClCompile Include="core\pointer.cpp" />
+    <ClCompile Include="core\runnable.cpp" />
     <ClCompile Include="core\structure.cpp" />
+    <ClCompile Include="core\thread.cpp" />
+    <ClCompile Include="core\threadpool.cpp" />
+    <ClCompile Include="core\timer.cpp" />
     <ClCompile Include="core\tools.cpp" />
     <ClCompile Include="core\vector.cpp" />
     <ClCompile Include="main.cpp" />

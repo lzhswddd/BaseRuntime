@@ -396,11 +396,11 @@ void Array::mChannel(const Array& src, int32 w, int32 h)
 	CHECK_MATRIX(data);
 	CHECK_MATRIX(src.data);
 	CHECK_TYPE_(depth(), src.depth());
-	if (this->rows <= rows || this->cols <= cols || src.channels() != c_)
+    if (this->rows <= h || this->cols <= w || src.channels() != c_)
 		THROW_INFO(ERR_INFO_SIZE);
 #endif // LZH_DEBUG
 	for (int32 i = 0; i < c_; ++i)
-		set(rows, cols, i, src, src.toidx(i));
+        set(h, w, i, src, src.toidx(i));
 }
 Array Array::reshape(Size3 size)
 {

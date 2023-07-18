@@ -2,6 +2,7 @@
 #include "traindata.h"
 #include "../lzh.h"
 #include <fstream>
+#include <random>
 
 using namespace lzh;
 nn::TrainData::TrainData()
@@ -13,7 +14,7 @@ nn::TrainData::TrainData(string rootpath, string imglist,
 {
 	load_train_data(rootpath, imglist, batch_size, label_process);
 }
-nn::TrainData::TrainData(const vec_mat & data, const vec_mat & label, int batch_size, const vector<Mat>(*label_process)(const Mat&))
+nn::TrainData::TrainData(const vec_mat & data, const vec_mat & label, int batch_size, const vector<Mat>(*)(const Mat&))
 	: batch_size(batch_size)
 {
 	if (data.size() == label.size()) {
@@ -25,7 +26,9 @@ nn::TrainData::TrainData(const vec_mat & data, const vec_mat & label, int batch_
 		for (int32 i : lzh::range(_I(data.size()))) {
 			traindata[i] = { data[i],  vec_mat(1, label[i]) };
 		}
-		random_shuffle(traindata.begin(), traindata.end());
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(traindata.begin(), traindata.end(), g);
 		index = 0;
 		for (vector<NetData*> &vec : batchdata)
 		{
@@ -37,7 +40,7 @@ nn::TrainData::TrainData(const vec_mat & data, const vec_mat & label, int batch_
 		}
 	}
 }
-nn::TrainData::TrainData(const vec_mat & data, const vecs_mat & label, int batch_size, const vector<Mat>(*label_process)(const Mat &))
+nn::TrainData::TrainData(const vec_mat & data, const vecs_mat & label, int batch_size, const vector<Mat>(*)(const Mat &))
 	: batch_size(batch_size)
 {
 	if (data.size() == label.size()) {
@@ -48,8 +51,10 @@ nn::TrainData::TrainData(const vec_mat & data, const vecs_mat & label, int batch
 		batchdata.resize(batch_number);
 		for (int32 i : lzh::range(_I(data.size()))) {
 			traindata[i] = { data[i], label[i] };
-		}
-		random_shuffle(traindata.begin(), traindata.end());
+        }
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(traindata.begin(), traindata.end(), g);
 		index = 0;
 		for (vector<NetData*> &vec : batchdata)
 		{
@@ -74,8 +79,10 @@ nn::TrainData::TrainData(
 	batchdata.resize(batch_number);
 	for (int32 i : lzh::range(_I(data.size()))) {
 		traindata[i] = data[i];
-	}
-	random_shuffle(traindata.begin(), traindata.end());
+    }
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(traindata.begin(), traindata.end(), g);
 	index = 0;
 	for (vector<NetData*> &vec : batchdata)
 	{
@@ -107,8 +114,10 @@ void nn::TrainData::Running(bool run)
 }
 void nn::TrainData::reset()
 {
-	if (batchdata.size() == range.size()) {
-		random_shuffle(traindata.begin(), traindata.end());
+    if (batchdata.size() == range.size()) {
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(traindata.begin(), traindata.end(), g);
 		index = 0;
 		for (vector<NetData*> &vec : batchdata)
 		{
@@ -145,13 +154,13 @@ int nn::TrainData::len() const
 nn::TrainData::iterator lzh::nn::TrainData::batches()
 {
 	vector<NetData*>* batch;
-	if (batchdata.size() == batch_number) {
+    if (batchdata.size() == (size_t)batch_number) {
 		batch = &batchdata[index];
 	}
 	else {
 		next();
 		batch = &batchdata[index];
-		if (batchdata.size() == batch_number) {
+        if (batchdata.size() == (size_t)batch_number) {
 			vector<vector<Mat>>().swap(label);
 			vector<Mat>().swap(data);
 			vector<string>().swap(imgpath);
@@ -179,7 +188,7 @@ nn::TrainData::ConstDataBox nn::TrainData::all_batches() const
 void nn::TrainData::load_all_data(bool is_show, void(*print)(void*, const char *))
 {
 	index = 0;
-	if (traindata.size() == batch_number * batch_size) {
+    if (traindata.size() == (size_t)(batch_number * batch_size)) {
 		for (int &v : range) {
 			if (!running) {
 				return;
@@ -232,8 +241,10 @@ void nn::TrainData::get_train_data(string imglist, const vector<Mat>(*label_proc
 			}
 			file.push_back(str);
 		}
-		in.close();
-		random_shuffle(file.begin(), file.end());
+        in.close();
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(file.begin(), file.end(), g);
 		for (string &s : file) {
 			if (!running) {
 				return;

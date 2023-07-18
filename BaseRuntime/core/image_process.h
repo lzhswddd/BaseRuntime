@@ -282,6 +282,8 @@ namespace lzh
 	extern LZHAPI void reverse(InputArray src, OutputArray dst, Val v);
 	extern LZHAPI void matchTemplate(InputArray src, InputArray template_, OutputArray dst, MatchMethod method);
 	extern LZHAPI void inRange(InputArray src, InputArray lowerb, InputArray upperb, OutputArray dst);
+	extern LZHAPI void histogram(InputArray src, OutputArray _histogram);
+	extern LZHAPI void equalizeHistogram(InputArray src, OutputArray dst);
 	/**
 	@brief 返回按boundary分界填充的矩阵
 	返回矩阵大小等于输入矩阵大小
@@ -500,8 +502,6 @@ namespace lzh
 	extern LZHAPI void projection(InputArray src, OutputArray vertical, OutputArray horizontal);
 	extern LZHAPI void verticalProjection(InputArray src, OutputArray vertical);
 	extern LZHAPI void horizontalProjection(InputArray src, OutputArray horizontal);
-	extern LZHAPI void histogram(InputArray src, OutputArray _histogram);
-	extern LZHAPI void equalizeHistogram(InputArray src, OutputArray dst);
 	extern LZHAPI void mosaic(InputArray src, OutputArray dst, Rect mosaicRange, int32 ksize = 3, MosaicMethod method = MosaicAngle135);
 	extern LZHAPI void mosaic(InputOutputArray image, Point mosaicRange, int32 ksize = 3, MosaicMethod method = MosaicAngle135);
 	extern LZHAPI void mosaic(InputArray src, OutputArray dst, vec_p2_32s mosaicRange, int32 ksize = 3, MosaicMethod method = MosaicAngle135);

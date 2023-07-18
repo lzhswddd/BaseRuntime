@@ -9342,33 +9342,57 @@ public:
 		{
 			if (!wglMakeCurrent(NULL, NULL))
 			{
-				MessageBox(NULL, "Release Of DC And RC Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-			}
+#ifdef UNICODE
+                MessageBox(NULL, STR2WSTR("Release Of DC And RC Failed."), STR2WSTR("SHUTDOWN ERROR"), MB_OK | MB_ICONINFORMATION);
+#else
+                MessageBox(NULL, "Release Of DC And RC Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
+#endif // !UNICODE
+            }
 
-			if (!wglDeleteContext(hRC))
-			{
-				MessageBox(NULL, "Release Rendering Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-			}
-			hRC = NULL;
-		}
+            if (!wglDeleteContext(hRC))
+            {
+#ifdef UNICODE
+                MessageBox(NULL, STR2WSTR("Release Rendering Context Failed."), STR2WSTR("SHUTDOWN ERROR"), MB_OK | MB_ICONINFORMATION);
+#else
+                MessageBox(NULL, "Release Rendering Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
+#endif // !UNICODE
+            }
+            hRC = NULL;
+        }
 
 		if (hDC && !ReleaseDC(hWnd, hDC))
 		{
-			MessageBox(NULL, "Release Device Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-			hDC = NULL;
-		}
+#ifdef UNICODE
+            MessageBox(NULL, Str2WStr("Release Device Context Failed.").c_str(), Str2WStr("SHUTDOWN ERROR").c_str(), MB_OK | MB_ICONINFORMATION);
+#else
+            MessageBox(NULL, "Release Device Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
+#endif // !UNICODE
+            hDC = NULL;
+        }
 
 		if (hWnd && !DestroyWindow(hWnd))
 		{
-			MessageBox(NULL, "Could Not Release hWnd.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
+#ifdef UNICODE
+            MessageBox(NULL, Str2WStr("Could Not Release hWnd.").c_str(), Str2WStr("SHUTDOWN ERROR").c_str(), MB_OK | MB_ICONINFORMATION);
+#else
+            MessageBox(NULL, "Could Not Release hWnd.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
+#endif // !UNICODE
 			hWnd = NULL;
 		}
 
-		if (!UnregisterClass(name.c_str(), hInstance))
-		{
-			MessageBox(NULL, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
-			hInstance = NULL;
-		}
+#ifdef UNICODE
+        if (!UnregisterClass(Str2WStr(name).c_str(), hInstance))
+        {
+            MessageBox(NULL, Str2WStr("Could Not Unregister Class.").c_str(), Str2WStr("SHUTDOWN ERROR").c_str(), MB_OK | MB_ICONINFORMATION);
+            hInstance = NULL;
+        }
+#else
+        if (!UnregisterClass(name.c_str(), hInstance))
+        {
+            MessageBox(NULL, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
+            hInstance = NULL;
+        }
+#endif // !UNICODE
 		image.release();
 		hDC = NULL;
 		hRC = NULL;
@@ -9399,12 +9423,19 @@ public:
 		wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.hbrBackground = NULL;
-		wc.lpszMenuName = NULL;
-		wc.lpszClassName = name.c_str();
-
+        wc.lpszMenuName = NULL;
+#ifdef UNICODE
+        wc.lpszClassName = Str2WStr(name).c_str();
+#else
+        wc.lpszClassName = name.c_str();
+#endif // !UNICODE
 		if (!RegisterClass(&wc))
 		{
-			MessageBox(NULL, "Failed To Register The Window Class.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+#ifdef UNICODE
+            MessageBox(NULL, STR2WSTR("Failed To Register The Window Class."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+#else
+            MessageBox(NULL, "Failed To Register The Window Class.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+#endif // !UNICODE
 			return FALSE;
 		}
 
@@ -9421,15 +9452,28 @@ public:
 
 			if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
 			{
-				if (MessageBox(NULL, "The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", "NeHe GL", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
-				{
-					fullscreen = FALSE;
-				}
-				else
-				{
-					MessageBox(NULL, "Program Will Now Close.", "ERROR", MB_OK | MB_ICONSTOP);
-					return FALSE;
-				}
+#ifdef UNICODE
+                if (MessageBox(NULL, STR2WSTR("The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?"),
+                               STR2WSTR("NeHe GL"), MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
+                {
+                    fullscreen = FALSE;
+                }
+                else
+                {
+                    MessageBox(NULL, STR2WSTR("Program Will Now Close."), STR2WSTR("ERROR"), MB_OK | MB_ICONSTOP);
+                    return FALSE;
+                }
+#else
+                if (MessageBox(NULL, "The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", "NeHe GL", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
+                {
+                    fullscreen = FALSE;
+                }
+                else
+                {
+                    MessageBox(NULL, "Program Will Now Close.", "ERROR", MB_OK | MB_ICONSTOP);
+                    return FALSE;
+                }
+#endif // !UNICODE
 			}
 		}
 
@@ -9447,92 +9491,180 @@ public:
 
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);
 
+#ifdef UNICODE
+        if (!(hWnd = CreateWindowEx(dwExStyle,
+            STR2WSTR(name),
+            STR2WSTR(title),
+            dwStyle |
+            WS_CLIPSIBLINGS |
+            WS_CLIPCHILDREN,
+            0, 0,
+            WindowRect.right - WindowRect.left,
+            WindowRect.bottom - WindowRect.top,
+            NULL,
+            NULL,
+            hInstance,
+            NULL)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Window Creation Error."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+        pfd =
+        {
+            sizeof(PIXELFORMATDESCRIPTOR),
+            1,
+            PFD_DRAW_TO_WINDOW |
+            PFD_SUPPORT_OPENGL |
+            PFD_DOUBLEBUFFER,
+            PFD_TYPE_RGBA,
+            (BYTE)bits,
+            0, 0, 0, 0, 0, 0,
+            0,
+            0,
+            0,
+            0, 0, 0, 0,
+            16,
+            0,
+            0,
+            PFD_MAIN_PLANE,
+            0,
+            0, 0, 0
+        };
+        if (!(hDC = GetDC(hWnd)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Can't Create A GL Device Context."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
 
-		if (!(hWnd = CreateWindowEx(dwExStyle,
-			name.c_str(),
-			title,
-			dwStyle |
-			WS_CLIPSIBLINGS |
-			WS_CLIPCHILDREN,
-			0, 0,
-			WindowRect.right - WindowRect.left,
-			WindowRect.bottom - WindowRect.top,
-			NULL,
-			NULL,
-			hInstance,
-			NULL)))
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Window Creation Error.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
-		pfd =
-		{
-			sizeof(PIXELFORMATDESCRIPTOR),
-			1,
-			PFD_DRAW_TO_WINDOW |
-			PFD_SUPPORT_OPENGL |
-			PFD_DOUBLEBUFFER,
-			PFD_TYPE_RGBA,
-			(BYTE)bits,
-			0, 0, 0, 0, 0, 0,
-			0,
-			0,
-			0,
-			0, 0, 0, 0,
-			16,
-			0,
-			0,
-			PFD_MAIN_PLANE,
-			0,
-			0, 0, 0
-		};
-		if (!(hDC = GetDC(hWnd)))
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Can't Create A GL Device Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
+        if (!(PixelFormat = ChoosePixelFormat(hDC, &pfd)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Can't Find A Suitable PixelFormat."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
 
-		if (!(PixelFormat = ChoosePixelFormat(hDC, &pfd)))
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Can't Find A Suitable PixelFormat.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
+        if (!SetPixelFormat(hDC, PixelFormat, &pfd))
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Can't Set The PixelFormat."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
 
-		if (!SetPixelFormat(hDC, PixelFormat, &pfd))
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Can't Set The PixelFormat.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
+        if (!(hRC = wglCreateContext(hDC)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Can't Create A GL Rendering Context."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
 
-		if (!(hRC = wglCreateContext(hDC)))
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Can't Create A GL Rendering Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
+        if (!wglMakeCurrent(hDC, hRC))
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Can't Activate The GL Rendering Context."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
 
-		if (!wglMakeCurrent(hDC, hRC))
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Can't Activate The GL Rendering Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
+        ShowWindow(hWnd, SW_SHOW);
+        SetForegroundWindow(hWnd);
+        SetFocus(hWnd);
+        ReSizeGLScene(width, height);
 
-		ShowWindow(hWnd, SW_SHOW);
-		SetForegroundWindow(hWnd);
-		SetFocus(hWnd);
-		ReSizeGLScene(width, height);
+        if (!InitGL())
+        {
+            KillGLWindow();
+            MessageBox(NULL, STR2WSTR("Initialization Failed."), STR2WSTR("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+#else
+        if (!(hWnd = CreateWindowEx(dwExStyle,
+            name.c_str(),
+            title,
+            dwStyle |
+            WS_CLIPSIBLINGS |
+            WS_CLIPCHILDREN,
+            0, 0,
+            WindowRect.right - WindowRect.left,
+            WindowRect.bottom - WindowRect.top,
+            NULL,
+            NULL,
+            hInstance,
+            NULL)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Window Creation Error.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+        pfd =
+        {
+            sizeof(PIXELFORMATDESCRIPTOR),
+            1,
+            PFD_DRAW_TO_WINDOW |
+            PFD_SUPPORT_OPENGL |
+            PFD_DOUBLEBUFFER,
+            PFD_TYPE_RGBA,
+            (BYTE)bits,
+            0, 0, 0, 0, 0, 0,
+            0,
+            0,
+            0,
+            0, 0, 0, 0,
+            16,
+            0,
+            0,
+            PFD_MAIN_PLANE,
+            0,
+            0, 0, 0
+        };
+        if (!(hDC = GetDC(hWnd)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Can't Create A GL Device Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
 
-		if (!InitGL())
-		{
-			KillGLWindow();
-			MessageBox(NULL, "Initialization Failed.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
-			return FALSE;
-		}
+        if (!(PixelFormat = ChoosePixelFormat(hDC, &pfd)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Can't Find A Suitable PixelFormat.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+
+        if (!SetPixelFormat(hDC, PixelFormat, &pfd))
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Can't Set The PixelFormat.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+
+        if (!(hRC = wglCreateContext(hDC)))
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Can't Create A GL Rendering Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+
+        if (!wglMakeCurrent(hDC, hRC))
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Can't Activate The GL Rendering Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+
+        ShowWindow(hWnd, SW_SHOW);
+        SetForegroundWindow(hWnd);
+        SetFocus(hWnd);
+        ReSizeGLScene(width, height);
+
+        if (!InitGL())
+        {
+            KillGLWindow();
+            MessageBox(NULL, "Initialization Failed.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+            return FALSE;
+        }
+#endif // !UNICODE
+
 		windowhandle.mouse[hWnd];
 		windowhandle.keys[hWnd] = new bool[256];
 		memset(windowhandle.keys[hWnd], 0, sizeof(bool) * 256);

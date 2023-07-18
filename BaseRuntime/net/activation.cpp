@@ -26,7 +26,7 @@ void nn::activation::forword_train(const vector<Mat> & in, vector<Mat> & out, ve
 	for (size_t idx = 0; idx < in.size(); ++idx)
 		out[idx] = active.f(in[idx]);
 }
-void nn::activation::back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *dlayer, int *number)const
+void nn::activation::back(const vector<Mat> &in, vector<Mat> & out, vector<Mat> *, int *)const
 {
 	for (size_t idx = 0; idx < in.size(); ++idx) {
 		out[idx] = in[idx].mul(active.df(variable[idx]));
@@ -36,7 +36,7 @@ Size3 nn::activation::initialize(Size3 param_size)
 {
 	return param_size;
 }
-void nn::activation::save(json * jarray, FILE * file) const
+void nn::activation::save(json * jarray, FILE * ) const
 {
 	json info;
 	info["type"] = Layer::Type2String(type);
@@ -45,7 +45,7 @@ void nn::activation::save(json * jarray, FILE * file) const
 	info["activate"] = Func2String(active.f);
 	jarray->push_back(info);
 }
-void nn::activation::load(json & info, FILE * file)
+void nn::activation::load(json & info, FILE * )
 {
 	type = Layer::String2Type(info["type"]);
 	layer_index = info["layer"];

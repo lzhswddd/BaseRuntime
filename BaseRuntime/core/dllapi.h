@@ -14,7 +14,8 @@ namespace lzh
 		using keyType = typename std::string;
 		explicit FunctionApi();
 		explicit FunctionApi(const void *fun, const std::string & port);
-		explicit FunctionApi(const std::vector<const void *> & fun, const std::vector<std::string> & port);
+        explicit FunctionApi(const std::vector<const void *> & fun, const std::vector<std::string> & port);
+        virtual ~FunctionApi();
 		template<typename _Tp> _Tp Ptr()const;
 
 		const void* f(keyType key)const;
@@ -47,9 +48,9 @@ namespace lzh
 		std::string getDllName()const;
 
 		bool tryPause(keyType port)const;
-		void append(keyType port);
+        void append(keyType port) override;
 
-		void clear() override;
+        void clear() override;
 		bool base()const override { return false; };
 		bool empty()const noexcept;
 	private:
@@ -73,14 +74,14 @@ namespace lzh
 		FunctionApi *api;
 	};
 
-	template<typename _Ptr> class TEMPLATE_API DllApi : public DynamicLibrary
+    template<typename _Ptr> class TEMPLATE_API DllApi : public DllApiData
 	{
 	public:
 		using keyType = typename FunctionApi::keyType;
 		using func_type = typename std::function<_Ptr>;
 
-		explicit DllApi(const char* dll_name, const char *dll_port) : DllApiData(dll_name, dll_port) {}
-		explicit DllApi(const void *fun) : DllApiData(fun) {}
+        explicit DllApi(const char* dll_name, const char *dll_port) : DllApiData(dll_name, dll_port) {}
+        explicit DllApi(const void *fun, const char *name) : DllApiData(fun, name) {}
 
 		template<typename ...Args> auto f(keyType key, const Args &... args)const;
 		template<typename ...Args> auto operator () (keyType key, const Args &... args)const;
@@ -90,15 +91,16 @@ namespace lzh
 		DllApi& operator = (const DllApi<_Ptr>& value) { if (this == &value) return *this; else return *this; }
 	};
 
-	template<typename R, typename ...Args> class TEMPLATE_API DllApi<R(*)(Args...)> : public DynamicLibrary
+    template<typename R, typename ...Args>
+    class DllApi<R(*)(Args...)> : public DllApiData
 	{
 	public:
 		using keyType = typename FunctionApi::keyType;
 		using func_type = typename std::function<R(Args...)>;
-		using result_type = typename R;
+        using result_type = R;
 
 		explicit DllApi(const char* dll_name, const char *dll_port) : DllApiData(dll_name, dll_port) {}
-		explicit DllApi(const void *fun) : DllApiData(fun) {}
+        explicit DllApi(const void *fun, const char *name) : DllApiData(fun, name) {}
 
 		//template<typename ...Args2> result_type f(const Args2 &... args)const;
 		R f(keyType key, const Args &... args)const;
@@ -108,15 +110,15 @@ namespace lzh
 		DllApi(const DllApi<R(*)(Args...)>& value) { *this = value; }
 		DllApi& operator = (const DllApi<R(*)(Args...)>& value) { if (this == &value) return *this; else return *this; }
 	};
-	template<typename R, typename ...Args> class TEMPLATE_API DllApi<R(Args...)> : public DynamicLibrary
+    template<typename R, typename ...Args> class DllApi<R(Args...)> : public DllApiData
 	{
 	public:
 		using keyType = typename FunctionApi::keyType;
 		using func_type = typename std::function<R(Args...)>;
-		using result_type = typename R;
+        using result_type = R;
 
 		explicit DllApi(const char* dll_name, const char *dll_port) : DllApiData(dll_name, dll_port) {}
-		explicit DllApi(const void *fun) : DllApiData(fun) {}
+        explicit DllApi(const void *fun, const char *name) : DllApiData(fun, name) {}
 
 		template<typename ...Args2> R f(keyType key, const Args2 &... args)const;
 		//result_type f(const Args &... args)const;
@@ -129,15 +131,15 @@ namespace lzh
 }
 template<typename _Ptr> template<typename ...Args> inline auto lzh::DllApi<_Ptr>::operator()(keyType key, const Args &... args) const
 {
-	return f(args...);
+    return f(key, args...);
 }
 template<typename R, typename ...Args> inline R lzh::DllApi<R(*)(Args...)>::operator()(keyType key, const Args & ...args) const
 {
-	return f(args...);
+    return f(key, args...);
 }
 template<typename R, typename ...Args> inline R lzh::DllApi<R(Args...)>::operator()(keyType key, const Args & ...args) const
 {
-	return f(args...);
+    return f(key, args...);
 }
 
 template<typename _Ptr> template<typename ...Args> inline auto lzh::DllApi<_Ptr>::f(keyType key, const Args &... args) const

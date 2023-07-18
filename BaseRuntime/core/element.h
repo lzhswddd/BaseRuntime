@@ -779,7 +779,7 @@ namespace lzh
 		using value_type = typename _Tp;
 		static bool Custom() { return false; }
 		static Element Convert(const _Tp& val) { return val; }
-		static _Tp Convert(const Element& val) { return val; }
+		static auto Convert(const Element& val) { return val; }
 	};
 
 	extern LZHAPI const Element& noElem();

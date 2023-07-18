@@ -10,7 +10,7 @@ namespace lzh
 	class TEMPLATE_API Vec
 	{
 	public:
-		using value_type = typename _Tp;
+        using value_type = _Tp;
 
 		explicit Vec();
 		Vec(const _Tp *v);
